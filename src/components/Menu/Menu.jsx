@@ -30,7 +30,13 @@ function Menu({ children, items = [] }) {
   const renderItems = () => {
     return current.data.map((item, index) => {
       return (
-        <Button key={index} className={cx('menu-item')} icon={item.icon} to={item.to} onClick={() => handleNext(item)}>
+        <Button
+          key={index}
+          className={cx('menu-item', { separate: item.separate })}
+          icon={item.icon}
+          to={item.to}
+          onClick={() => handleNext(item)}
+        >
           {item.title}
         </Button>
       )
@@ -39,7 +45,6 @@ function Menu({ children, items = [] }) {
 
   return (
     <Tippy
-      visible
       interactive
       delay={[0, 700]}
       placement='bottom-end'
