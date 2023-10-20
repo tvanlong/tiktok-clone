@@ -44,7 +44,7 @@ function useRouteElements() {
       )
     },
     {
-      path: '/profile',
+      path: '/:nickname',
       element: (
         <DefaultLayout>
           <Profile />
