@@ -13,4 +13,6 @@ class Http {
   }
 }
 
-export const http = new Http().instance
+const http = new Http().instance
+
+export default http

@@ -3,6 +3,13 @@
   --search-height: 46px;
   --search-top-spacer: 9px;
   --search-button-width: 52px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: #fff;
   height: var(--default-layout-header-height);
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.12);
 }

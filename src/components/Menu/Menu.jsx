@@ -46,13 +46,14 @@ function Menu({ children, items = [] }) {
   return (
     <Tippy
       interactive
-      delay={[0, 700]}
+      hideOnClick={false}
+      delay={[250, 250]}
       placement='bottom-end'
       render={(attrs) => (
         <div className={cx('menu-list')} tabIndex='-1' {...attrs}>
           <Wrapper className={cx('menu-popper')}>
             {history.length > 1 && <Header title={current.title} onBack={handleBack} />}
-            {renderItems()}
+            <div className={cx('menu-body')}> {renderItems()}</div>
           </Wrapper>
         </div>
       )}

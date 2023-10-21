@@ -76,6 +76,13 @@ function Search() {
     }
   }, [data])
 
+  // Kiểm tra nếu người dùng đang nhập mà xóa hết ký tự thì set loading là false
+  useEffect(() => {
+    if (!debounced.trim()) {
+      setLoading(false)
+    }
+  }, [debounced])
+
   const handleClear = () => {
     setSearchValue('')
     inputRef.current.focus()
@@ -86,44 +93,46 @@ function Search() {
   }
 
   return (
-    <Tippy
-      visible={showSearchResult && searchResult.length > 0}
-      interactive={true}
-      render={(attrs) => (
-        <div className={cx('search-result')} tabIndex='-1' {...attrs}>
-          <Wrapper>
-            <h4 className={cx('search-title')}>Accounts</h4>
-            {searchResult.map((result) => (
-              <AccountItem key={result.id} data={result} />
-            ))}
-          </Wrapper>
-        </div>
-      )}
-      onClickOutside={handleHideSearchResult}
-    >
-      <div className={cx('search')}>
-        <input
-          ref={inputRef}
-          placeholder='Search'
-          spellCheck={false}
-          value={searchValue}
-          onChange={(e) => {
-            setSearchValue(e.target.value.trimStart())
-            setLoading(true)
-          }}
-          onFocus={() => setShowSearchResult(true)}
-        />
-        {!!searchValue && !loading && (
-          <button className={cx('clear')} onClick={handleClear}>
-            <FontAwesomeIcon icon={faCircleXmark} />
-          </button>
+    <div>
+      <Tippy
+        visible={showSearchResult && searchResult.length > 0}
+        interactive={true}
+        render={(attrs) => (
+          <div className={cx('search-result')} tabIndex='-1' {...attrs}>
+            <Wrapper>
+              <h4 className={cx('search-title')}>Accounts</h4>
+              {searchResult.map((result) => (
+                <AccountItem key={result.id} data={result} />
+              ))}
+            </Wrapper>
+          </div>
         )}
-        {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-        <button className={cx('search-btn')}>
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </button>
-      </div>
-    </Tippy>
+        onClickOutside={handleHideSearchResult}
+      >
+        <div className={cx('search')}>
+          <input
+            ref={inputRef}
+            placeholder='Search'
+            spellCheck={false}
+            value={searchValue}
+            onChange={(e) => {
+              setSearchValue(e.target.value.trimStart())
+              setLoading(true)
+            }}
+            onFocus={() => setShowSearchResult(true)}
+          />
+          {!!searchValue && !loading && (
+            <button className={cx('clear')} onClick={handleClear}>
+              <FontAwesomeIcon icon={faCircleXmark} />
+            </button>
+          )}
+          {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
+          <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </button>
+        </div>
+      </Tippy>
+    </div>
   )
 }
 

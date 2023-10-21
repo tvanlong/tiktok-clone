@@ -21,6 +21,7 @@
 
   input {
     flex: 1;
+    font-family: var(--font-family);
     color: var(--black);
     font-size: 1.6rem;
     background-color: transparent;
@@ -49,17 +50,19 @@
 .search-btn {
   width: 52px;
   height: 100%;
-  opacity: 0.5;
+  opacity: 0.3;
   border-top-right-radius: 92px;
   border-bottom-right-radius: 92px;
   font-size: 1.8rem;
   cursor: pointer;
 
   &:hover {
+    opacity: 0.6;
     background-color: rgba(22, 24, 35, 0.03);
   }
 
   &:active {
+    opacity: 0.6;
     background-color: rgba(22, 24, 35, 0.06);
   }
 }

@@ -25,6 +25,8 @@ import Image from '~/components/Image'
 import Search from './components/Search'
 import classNames from 'classnames/bind'
 import styles from './Header.module.scss'
+import { Link } from 'react-router-dom'
+import path from '~/constants/path'
 
 const cx = classNames.bind(styles)
 
@@ -92,7 +94,9 @@ function Header() {
   return (
     <header className={cx('wrapper')}>
       <div className={cx('inner')}>
-        <img src={images.logo} alt='Tiktok' />
+        <Link to={path.home}>
+          <img src={images.logo} alt='Tiktok' />
+        </Link>
         <Search />
         {user ? (
           <>
@@ -100,27 +104,29 @@ function Header() {
               <Button className={cx('btn-upload-hover')} icon={<FontAwesomeIcon icon={faPlus} />}>
                 Upload
               </Button>
-              <Tippy
-                placement='bottom'
-                interactive={true}
-                render={(attrs) => (
-                  <div className={cx('download')} tabIndex='-1' {...attrs}>
-                    <Wrapper>
-                      <div className={cx('download-content')}>
-                        <FontAwesomeIcon size='6x' icon={faLaptop} />
-                        <p>TikTok Desktop App</p>
-                        <Button primary large>
-                          Download
-                        </Button>
-                      </div>
-                    </Wrapper>
-                  </div>
-                )}
-              >
-                <button className={cx('app-btn')}>
-                  <DesktopApp />
-                </button>
-              </Tippy>
+              <div>
+                <Tippy
+                  placement='bottom'
+                  interactive={true}
+                  render={(attrs) => (
+                    <div className={cx('download')} tabIndex='-1' {...attrs}>
+                      <Wrapper>
+                        <div className={cx('download-content')}>
+                          <FontAwesomeIcon size='6x' icon={faLaptop} />
+                          <p>TikTok Desktop App</p>
+                          <Button primary large>
+                            Download
+                          </Button>
+                        </div>
+                      </Wrapper>
+                    </div>
+                  )}
+                >
+                  <button className={cx('app-btn')}>
+                    <DesktopApp />
+                  </button>
+                </Tippy>
+              </div>
               <TippyDefault delay={[0, 50]} content='Messages' placement='bottom'>
                 <button className={cx('messages-btn')}>
                   <MessageIcon />
@@ -148,27 +154,29 @@ function Header() {
                 Upload
               </Button>
               <Button primary>Log in</Button>
-              <Tippy
-                placement='bottom'
-                interactive={true}
-                render={(attrs) => (
-                  <div className={cx('download')} tabIndex='-1' {...attrs}>
-                    <Wrapper>
-                      <div className={cx('download-content')}>
-                        <FontAwesomeIcon size='6x' icon={faLaptop} />
-                        <p>TikTok Desktop App</p>
-                        <Button primary large>
-                          Download
-                        </Button>
-                      </div>
-                    </Wrapper>
-                  </div>
-                )}
-              >
-                <button className={cx('app-btn')}>
-                  <DesktopApp />
-                </button>
-              </Tippy>
+              <div>
+                <Tippy
+                  placement='bottom'
+                  interactive={true}
+                  render={(attrs) => (
+                    <div className={cx('download')} tabIndex='-1' {...attrs}>
+                      <Wrapper>
+                        <div className={cx('download-content')}>
+                          <FontAwesomeIcon size='6x' icon={faLaptop} />
+                          <p>TikTok Desktop App</p>
+                          <Button primary large>
+                            Download
+                          </Button>
+                        </div>
+                      </Wrapper>
+                    </div>
+                  )}
+                >
+                  <button className={cx('app-btn')}>
+                    <DesktopApp />
+                  </button>
+                </Tippy>
+              </div>
               <Menu items={MENU_ITEMS}>
                 <button className={cx('more-btn')}>
                   <MoreIcon />
