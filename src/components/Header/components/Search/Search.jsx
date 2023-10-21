@@ -7,6 +7,8 @@ import Wrapper from '~/components/Wrapper'
 import classNames from 'classnames/bind'
 import styles from './Search.module.scss'
 import useDebounce from '~/hooks/useDebounce'
+import { getUser } from '~/apis/user'
+import { useQuery } from '@tanstack/react-query'
 
 const cx = classNames.bind(styles)
 
@@ -18,22 +20,61 @@ function Search() {
   const debounced = useDebounce(searchValue, 500) // Dùng để giảm số lần gọi API khi người dùng nhập vào ô search
   const inputRef = useRef(null)
 
+  // Fetch API bằng fetch và useEffect
+  // useEffect(() => {
+  //   if (!debounced.trim()) {
+  //     setSearchResult([])
+  //     return
+  //   }
+  //   fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounced)}&type=less`)
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       setSearchResult(res.data)
+  //       setLoading(false)
+  //     })
+  //     .catch((err) => {
+  //       console.log(err)
+  //       setLoading(false)
+  //     })
+  // }, [debounced])
+
+  // --------------------------------------------------------------------------------
+
+  // Fecth API bằng axios và useEffect
+  // useEffect(() => {
+  //   if (!debounced.trim()) {
+  //     setSearchResult([])
+  //     return
+  //   }
+  //   getUser(debounced, 'less')
+  //     .then((res) => {
+  //       setSearchResult(res.data.data)
+  //     })
+  //     .finally(() => {
+  //       setLoading(false)
+  //     })
+  // }, [debounced])
+
+  // --------------------------------------------------------------------------------
+
+  // Fetch data với useQuery và axios
+  const { data } = useQuery({
+    queryKey: ['search', debounced],
+    queryFn: () => {
+      setLoading(false)
+      return getUser(debounced, 'less')
+    },
+    enabled: !!debounced.trim()
+  })
+
+  // Cập nhật searchResult khi data thay đổi
   useEffect(() => {
-    if (!debounced.trim()) {
-      setSearchResult([])
-      return
+    if (data) {
+      setSearchResult(data.data.data) // Cập nhật searchResult từ data
+    } else {
+      setSearchResult([]) // Gán searchResult là một mảng rỗng nếu data không tồn tại
     }
-    fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounced)}&type=less`)
-      .then((res) => res.json())
-      .then((res) => {
-        setSearchResult(res.data)
-        setLoading(false)
-      })
-      .catch((err) => {
-        console.log(err)
-        setLoading(false)
-      })
-  }, [debounced])
+  }, [data])
 
   const handleClear = () => {
     setSearchValue('')
