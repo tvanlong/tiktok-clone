@@ -17,16 +17,16 @@ function Search() {
   const [searchResult, setSearchResult] = useState([])
   const [showSearchResult, setShowSearchResult] = useState(true)
   const [loading, setLoading] = useState(false)
-  const debounced = useDebounce(searchValue, 500) // Dùng để giảm số lần gọi API khi người dùng nhập vào ô search
+  const debouncedValue = useDebounce(searchValue, 500) // Dùng để giảm số lần gọi API khi người dùng nhập vào ô search
   const inputRef = useRef(null)
 
   // Fetch API bằng fetch và useEffect
   // useEffect(() => {
-  //   if (!debounced.trim()) {
+  //   if (!debouncedValue.trim()) {
   //     setSearchResult([])
   //     return
   //   }
-  //   fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debounced)}&type=less`)
+  //   fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debouncedValue)}&type=less`)
   //     .then((res) => res.json())
   //     .then((res) => {
   //       setSearchResult(res.data)
@@ -36,35 +36,35 @@ function Search() {
   //       console.log(err)
   //       setLoading(false)
   //     })
-  // }, [debounced])
+  // }, [debouncedValue])
 
   // --------------------------------------------------------------------------------
 
   // Fecth API bằng axios và useEffect
   // useEffect(() => {
-  //   if (!debounced.trim()) {
+  //   if (!debouncedValue.trim()) {
   //     setSearchResult([])
   //     return
   //   }
-  //   getUser(debounced, 'less')
+  //   getUser(debouncedValue, 'less')
   //     .then((res) => {
   //       setSearchResult(res.data.data)
   //     })
   //     .finally(() => {
   //       setLoading(false)
   //     })
-  // }, [debounced])
+  // }, [debouncedValue])
 
   // --------------------------------------------------------------------------------
 
   // Fetch data với useQuery và axios
   const { data } = useQuery({
-    queryKey: ['search', debounced],
+    queryKey: ['search', debouncedValue],
     queryFn: () => {
       setLoading(false)
-      return getUser(debounced, 'less')
+      return getUser(debouncedValue, 'less')
     },
-    enabled: !!debounced.trim()
+    enabled: !!debouncedValue.trim()
   })
 
   // Cập nhật searchResult khi data thay đổi
@@ -78,10 +78,10 @@ function Search() {
 
   // Kiểm tra nếu người dùng đang nhập mà xóa hết ký tự thì set loading là false
   useEffect(() => {
-    if (!debounced.trim()) {
+    if (!debouncedValue.trim()) {
       setLoading(false)
     }
-  }, [debounced])
+  }, [debouncedValue])
 
   const handleClear = () => {
     setSearchValue('')
@@ -92,21 +92,23 @@ function Search() {
     setShowSearchResult(false)
   }
 
+  const renderResult = (attrs) => (
+    <div className={cx('search-result')} tabIndex='-1' {...attrs}>
+      <Wrapper>
+        <h4 className={cx('search-title')}>Accounts</h4>
+        {searchResult.map((result) => (
+          <AccountItem key={result.id} data={result} />
+        ))}
+      </Wrapper>
+    </div>
+  )
+
   return (
     <div>
       <Tippy
         visible={showSearchResult && searchResult.length > 0}
         interactive={true}
-        render={(attrs) => (
-          <div className={cx('search-result')} tabIndex='-1' {...attrs}>
-            <Wrapper>
-              <h4 className={cx('search-title')}>Accounts</h4>
-              {searchResult.map((result) => (
-                <AccountItem key={result.id} data={result} />
-              ))}
-            </Wrapper>
-          </div>
-        )}
+        render={renderResult}
         onClickOutside={handleHideSearchResult}
       >
         <div className={cx('search')}>
