@@ -21,15 +21,14 @@ import ListAcount from '~/components/ListAccount'
 const cx = classNames.bind(styles)
 
 const INIT_PAGE = 1
-const PER_PAGE = 5
+const PER_PAGE = 20
 
 function Sidebar() {
-  const [perPage, setPerPage] = useState(PER_PAGE)
   const [suggestedUsers, setSuggestedUsers] = useState([])
   const [isSeeAll, setIsSeeAll] = useState(false)
   const { data } = useQuery({
-    queryKey: ['suggestedUsers', perPage],
-    queryFn: () => getSuggestedUsers(INIT_PAGE, perPage)
+    queryKey: ['suggestedUsers'],
+    queryFn: () => getSuggestedUsers(INIT_PAGE, PER_PAGE)
   })
 
   useEffect(() => {
@@ -41,10 +40,8 @@ function Sidebar() {
   const handleViewChange = () => {
     if (isSeeAll) {
       setIsSeeAll(false)
-      setPerPage(PER_PAGE)
     } else {
       setIsSeeAll(true)
-      setPerPage((prev) => prev + PER_PAGE)
     }
   }
 
