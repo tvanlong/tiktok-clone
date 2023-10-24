@@ -7,7 +7,7 @@ import Wrapper from '~/components/Wrapper'
 import classNames from 'classnames/bind'
 import styles from './Search.module.scss'
 import useDebounce from '~/hooks/useDebounce'
-import { getUser } from '~/apis/user'
+import { getSearchUsers } from '~/apis/searchUsers'
 import { useQuery } from '@tanstack/react-query'
 
 const cx = classNames.bind(styles)
@@ -46,7 +46,7 @@ function Search() {
   //     setSearchResult([])
   //     return
   //   }
-  //   getUser(debouncedValue, 'less')
+  //   getSearchUsers(debouncedValue, 'less')
   //     .then((res) => {
   //       setSearchResult(res.data.data)
   //     })
@@ -62,7 +62,7 @@ function Search() {
     queryKey: ['search', debouncedValue],
     queryFn: () => {
       setLoading(false)
-      return getUser(debouncedValue, 'less')
+      return getSearchUsers(debouncedValue, 'less')
     },
     enabled: !!debouncedValue.trim()
   })

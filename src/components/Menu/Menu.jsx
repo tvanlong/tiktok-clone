@@ -5,7 +5,7 @@ import Wrapper from '~/components/Wrapper'
 import classNames from 'classnames/bind'
 import styles from './Menu.module.scss'
 import Button from '~/components/Button'
-import Header from './components/Header'
+import Header from './Header'
 
 const cx = classNames.bind(styles)
 

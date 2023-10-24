@@ -1,0 +1,12 @@
+.wrapper {
+  width: 248px;
+  padding: 20px 8px 26px 8px;
+  margin-left: -18px;
+  height: calc(100vh - 60px);
+  overflow-y: overlay;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+

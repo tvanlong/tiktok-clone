@@ -1,6 +1,6 @@
 import http from '~/utils/http'
 
-export const getUser = (q, type) =>
+export const getSearchUsers = (q, type) =>
   http.get('users/search', {
     params: {
       q,
