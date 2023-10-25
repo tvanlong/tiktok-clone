@@ -1,3 +1,5 @@
+import { useContext } from 'react'
+import { AppContext } from '~/contexts/app.context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faLightbulb,
@@ -65,6 +67,7 @@ const MENU_ITEMS = [
 ]
 
 function Header() {
+  const { toggleModal } = useContext(AppContext)
   const userMenu = [
     {
       icon: <FontAwesomeIcon icon={faUser} />,
@@ -89,7 +92,7 @@ function Header() {
       separate: true
     }
   ]
-  const user = true // Kiểm tra xem người dùng đã đăng nhập hay chưa
+  const user = false // Kiểm tra xem người dùng đã đăng nhập hay chưa
 
   return (
     <header className={cx('wrapper')}>
@@ -153,7 +156,9 @@ function Header() {
               <Button className={cx('btn-upload-hover')} icon={<FontAwesomeIcon icon={faPlus} />}>
                 Upload
               </Button>
-              <Button primary>Log in</Button>
+              <Button primary onClick={toggleModal}>
+                Log in
+              </Button>
               <div>
                 <Tippy
                   placement='bottom'

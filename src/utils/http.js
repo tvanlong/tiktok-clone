@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { toast } from 'react-toastify'
 import config from '~/constants/config'
 
 class Http {
@@ -10,6 +11,21 @@ class Http {
         'Content-Type': 'application/json'
       }
     })
+    this.instance.interceptors.response.use(
+      function (response) {
+        return response
+      },
+      function (error) {
+        if (error.response.status === 409) {
+          const message = error.response.data.message || 'Something went wrong'
+          toast.error(message, {
+            autoClose: 3000,
+            pauseOnHover: true
+          })
+        }
+        return Promise.reject(error)
+      }
+    )
   }
 }
 

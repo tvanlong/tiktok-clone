@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getSuggestedUsers } from '~/apis/suggestedUsers'
+import { getSuggestedUsers } from '~/apis/suggestedUsers.api'
 import path from '~/constants/path'
 import Menu from './Menu'
 import MenuItem from './MenuItem'

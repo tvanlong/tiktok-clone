@@ -7,7 +7,7 @@ import Wrapper from '~/components/Wrapper'
 import classNames from 'classnames/bind'
 import styles from './Search.module.scss'
 import useDebounce from '~/hooks/useDebounce'
-import { getSearchUsers } from '~/apis/searchUsers'
+import { getSearchUsers } from '~/apis/searchUsers.api'
 import { useQuery } from '@tanstack/react-query'
 
 const cx = classNames.bind(styles)
