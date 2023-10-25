@@ -6,12 +6,28 @@ import classNames from 'classnames/bind'
 import styles from './Menu.module.scss'
 import Button from '~/components/Button'
 import Header from './Header'
+import { useMutation } from '@tanstack/react-query'
+import { logoutAccount } from '~/apis/auth.api'
 
 const cx = classNames.bind(styles)
 
-function Menu({ children, items = [] }) {
+function Menu({ children, items = [], setIsAuthenticated }) {
   const [history, setHistory] = useState([{ data: items }])
   const current = history[history.length - 1]
+
+  const logoutMutation = useMutation({
+    mutationFn: logoutAccount,
+    onSuccess: () => {
+      setIsAuthenticated(false)
+    },
+    onError: (error) => {
+      console.log(error)
+    }
+  })
+
+  const handleLogout = () => {
+    logoutMutation.mutate()
+  }
 
   const handleNext = (item) => {
     if (item.children) {
@@ -35,7 +51,8 @@ function Menu({ children, items = [] }) {
           className={cx('menu-item', { separate: item.separate })}
           icon={item.icon}
           to={item.to}
-          onClick={() => handleNext(item)}
+          {...(item.children && { onClick: () => handleNext(item) })} // Nếu có children thì onClick sẽ là handleNext
+          {...(item.logout && { onClick: handleLogout })} // Nếu có logout thì onClick sẽ là setIsAuthenticated
         >
           {item.title}
         </Button>

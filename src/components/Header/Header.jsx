@@ -1,20 +1,7 @@
 import { useContext } from 'react'
 import { AppContext } from '~/contexts/app.context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {
-  faLightbulb,
-  faEarthAmericas,
-  faCircleQuestion,
-  faKeyboard,
-  faMoon,
-  faUser,
-  faBookmark,
-  faCoins,
-  faGear,
-  faSignOut,
-  faPlus,
-  faLaptop
-} from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faLaptop } from '@fortawesome/free-solid-svg-icons'
 import Tippy from '@tippyjs/react/headless'
 import TippyDefault from '@tippyjs/react'
 import 'tippy.js/dist/tippy.css'
@@ -29,70 +16,12 @@ import classNames from 'classnames/bind'
 import styles from './Header.module.scss'
 import { Link } from 'react-router-dom'
 import path from '~/constants/path'
+import { menuItems, userMenu } from '~/constants/menu'
 
 const cx = classNames.bind(styles)
 
-const MENU_ITEMS = [
-  {
-    icon: <FontAwesomeIcon icon={faLightbulb} />,
-    title: 'LIVE Creator Hub'
-  },
-  {
-    icon: <FontAwesomeIcon icon={faEarthAmericas} />,
-    title: 'English',
-    children: {
-      title: 'Language',
-      data: [
-        {
-          title: 'English'
-        },
-        {
-          title: 'Vietnamese'
-        }
-      ]
-    }
-  },
-  {
-    icon: <FontAwesomeIcon icon={faCircleQuestion} />,
-    title: 'Feedback and help'
-  },
-  {
-    icon: <FontAwesomeIcon icon={faKeyboard} />,
-    title: 'Keyboard shortcuts'
-  },
-  {
-    icon: <FontAwesomeIcon icon={faMoon} />,
-    title: 'Dark mode'
-  }
-]
-
 function Header() {
-  const { toggleModal } = useContext(AppContext)
-  const userMenu = [
-    {
-      icon: <FontAwesomeIcon icon={faUser} />,
-      title: 'View profile'
-    },
-    {
-      icon: <FontAwesomeIcon icon={faBookmark} />,
-      title: 'Favorties'
-    },
-    {
-      icon: <FontAwesomeIcon icon={faCoins} />,
-      title: 'Get coins'
-    },
-    {
-      icon: <FontAwesomeIcon icon={faGear} />,
-      title: 'Settings'
-    },
-    ...MENU_ITEMS,
-    {
-      icon: <FontAwesomeIcon icon={faSignOut} />,
-      title: 'Log out',
-      separate: true
-    }
-  ]
-  const user = false // Kiểm tra xem người dùng đã đăng nhập hay chưa
+  const { toggleModal, isAuthenticated, setIsAuthenticated } = useContext(AppContext)
 
   return (
     <header className={cx('wrapper')}>
@@ -101,7 +30,7 @@ function Header() {
           <img src={images.logo} alt='Tiktok' />
         </Link>
         <Search />
-        {user ? (
+        {isAuthenticated ? (
           <>
             <div className={cx('actions')}>
               <Button className={cx('btn-upload-hover')} icon={<FontAwesomeIcon icon={faPlus} />}>
@@ -141,7 +70,7 @@ function Header() {
                   <span className={cx('badge')}>3</span>
                 </button>
               </TippyDefault>
-              <Menu items={userMenu}>
+              <Menu items={userMenu} setIsAuthenticated={setIsAuthenticated}>
                 <Image
                   className={cx('avatar')}
                   src='https://img6.thuthuatphanmem.vn/uploads/2022/11/18/anh-avatar-don-gian-ma-dep_081757969.jpg'
@@ -182,7 +111,7 @@ function Header() {
                   </button>
                 </Tippy>
               </div>
-              <Menu items={MENU_ITEMS}>
+              <Menu items={menuItems}>
                 <button className={cx('more-btn')}>
                   <MoreIcon />
                 </button>
