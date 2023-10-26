@@ -1,7 +1,5 @@
 import { useContext } from 'react'
 import { AppContext } from '~/contexts/app.context'
-import classNames from 'classnames/bind'
-import styles from './ModalLogin.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Button from '~/components/Button'
@@ -11,6 +9,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { loginAccount } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
+import classNames from 'classnames/bind'
+import styles from './ModalLogin.module.scss'
 
 const cx = classNames.bind(styles)
 
@@ -81,7 +81,7 @@ function ModalLogin({ handleSwitchModal }) {
               <button className={cx('close-modal')} onClick={toggleModal}>
                 <FontAwesomeIcon className={cx('icon')} icon={faTimes} />
               </button>
-              <Button type='submit' primary className={cx('btn-login-modal')}>
+              <Button type='submit' disabled={loginAccountMutation.isPending} primary className={cx('btn-login-modal')}>
                 Log in
               </Button>
             </form>

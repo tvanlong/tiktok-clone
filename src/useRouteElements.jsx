@@ -11,6 +11,7 @@ import OnlyHeaderLayout from '~/layouts/OnlyHeaderLayout'
 import { useContext } from 'react'
 import { AppContext } from '~/contexts/app.context'
 import { toast } from 'react-toastify'
+import path from '~/constants/path'
 
 function ProtectedRoute() {
   // Nếu đã login (isAuthenticated là true) thì mới cho phép đi tiếp
@@ -31,7 +32,7 @@ function ProtectedRoute() {
 function useRouteElements() {
   const routeElements = useRoutes([
     {
-      path: '/',
+      path: path.home,
       element: (
         <DefaultLayout>
           <Home />
@@ -43,7 +44,7 @@ function useRouteElements() {
       element: <ProtectedRoute />,
       children: [
         {
-          path: '/following',
+          path: path.following,
           element: (
             <DefaultLayout>
               <Following />
@@ -51,7 +52,7 @@ function useRouteElements() {
           )
         },
         {
-          path: '/explore',
+          path: path.explore,
           element: (
             <DefaultLayout>
               <Explore />
@@ -59,23 +60,7 @@ function useRouteElements() {
           )
         },
         {
-          path: '/live',
-          element: (
-            <DefaultLayout>
-              <Live />
-            </DefaultLayout>
-          )
-        },
-        {
-          path: '/:nickname',
-          element: (
-            <DefaultLayout>
-              <Profile />
-            </DefaultLayout>
-          )
-        },
-        {
-          path: '/upload',
+          path: path.upload,
           element: (
             <OnlyHeaderLayout>
               <Upload />
@@ -85,7 +70,23 @@ function useRouteElements() {
       ]
     },
     {
-      path: '/search',
+      path: path.nickname,
+      element: (
+        <DefaultLayout>
+          <Profile />
+        </DefaultLayout>
+      )
+    },
+    {
+      path: path.live,
+      element: (
+        <DefaultLayout>
+          <Live />
+        </DefaultLayout>
+      )
+    },
+    {
+      path: path.search,
       element: (
         <DefaultLayout>
           <Search />

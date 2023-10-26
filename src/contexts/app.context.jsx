@@ -1,16 +1,17 @@
 import { useState, createContext } from 'react'
-import { getAccessToken } from '~/utils/auth'
+import { getAccessToken, getProfile } from '~/utils/auth'
 
 export const AppContext = createContext()
 
 const initialState = {
-  isAuthenticated: Boolean(getAccessToken())
+  isAuthenticated: Boolean(getAccessToken()),
+  profile: getProfile()
 }
 
 export const AppProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(initialState.isAuthenticated)
   const [showModal, setShowModal] = useState(false)
-  const [profile, setProfile] = useState(null)
+  const [profile, setProfile] = useState(initialState.profile)
   const toggleModal = () => setShowModal(!showModal)
 
   return (

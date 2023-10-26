@@ -23,9 +23,6 @@ function Menu({ children, items = [], setIsAuthenticated }) {
     mutationFn: logoutAccount,
     onSuccess: () => {
       setIsAuthenticated(false)
-    },
-    onError: (error) => {
-      console.log(error)
     }
   })
 
@@ -62,6 +59,7 @@ function Menu({ children, items = [], setIsAuthenticated }) {
           className={cx('menu-item', { separate: item.separate })}
           icon={item.icon}
           to={item.to}
+          disabled={logoutMutation.isPending}
           {...(item.children && { onClick: () => handleNext(item) })} // Nếu có children thì onClick sẽ là handleNext
           {...(item.logout && { onClick: handleLogout })} // Nếu có logout thì onClick sẽ là setIsAuthenticated
         >

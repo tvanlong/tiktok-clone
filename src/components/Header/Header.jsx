@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { AppContext } from '~/contexts/app.context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faLaptop } from '@fortawesome/free-solid-svg-icons'
@@ -21,13 +21,7 @@ import { menuItems, userMenu } from '~/constants/menu'
 const cx = classNames.bind(styles)
 
 function Header() {
-  const { toggleModal, isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext)
-
-  useEffect(() => {
-    if (localStorage.getItem('profile')) {
-      setProfile(JSON.parse(localStorage.getItem('profile')))
-    }
-  }, [setProfile])
+  const { toggleModal, isAuthenticated, setIsAuthenticated, profile } = useContext(AppContext)
 
   return (
     <header className={cx('wrapper')}>
@@ -77,15 +71,7 @@ function Header() {
                 </button>
               </TippyDefault>
               <Menu items={userMenu} setIsAuthenticated={setIsAuthenticated}>
-                <Image
-                  className={cx('avatar')}
-                  {...(profile?.avatar
-                    ? { src: profile.avatar }
-                    : {
-                        src: ''
-                      })}
-                  alt='avatar'
-                />
+                <Image className={cx('avatar')} src={profile?.avatar || ''} alt={profile?.name || ''} />
               </Menu>
             </div>
           </>

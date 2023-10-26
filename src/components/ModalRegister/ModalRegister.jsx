@@ -87,7 +87,12 @@ function ModalRegister({ handleSwitchModal }) {
               <button className={cx('close-modal')} onClick={toggleModal}>
                 <FontAwesomeIcon className={cx('icon')} icon={faTimes} />
               </button>
-              <Button type='submit' primary className={cx('btn-login-modal')}>
+              <Button
+                type='submit'
+                disabled={registerAccountMutation.isPending}
+                primary
+                className={cx('btn-login-modal')}
+              >
                 Sign up
               </Button>
             </form>

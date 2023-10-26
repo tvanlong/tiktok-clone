@@ -1,0 +1,63 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 692px;
+}
+
+.list-item-container {
+  position: relative;
+  display: flex;
+  padding: 20px 0px;
+  width: 100%;
+  max-width: 692px;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+}
+
+.text-info {
+  margin-right: 114px;
+}
+
+.nickname {
+  font-weight: bold;
+  font-size: 1.8rem;
+  margin-right: 5px;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.username {
+  font-size: 1.4rem;
+}
+
+.caption {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  max-width: 500px;
+}
+
+video {
+  width: 453px;
+  height: 567px;
+}
