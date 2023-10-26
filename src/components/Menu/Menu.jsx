@@ -8,10 +8,14 @@ import Button from '~/components/Button'
 import Header from './Header'
 import { useMutation } from '@tanstack/react-query'
 import { logoutAccount } from '~/apis/auth.api'
+import { toast } from 'react-toastify'
+import { AppContext } from '~/contexts/app.context'
+import { useContext } from 'react'
 
 const cx = classNames.bind(styles)
 
 function Menu({ children, items = [], setIsAuthenticated }) {
+  const { setProfile } = useContext(AppContext)
   const [history, setHistory] = useState([{ data: items }])
   const current = history[history.length - 1]
 
@@ -27,6 +31,13 @@ function Menu({ children, items = [], setIsAuthenticated }) {
 
   const handleLogout = () => {
     logoutMutation.mutate()
+    toast.success('Logout successfully!', {
+      position: 'top-center',
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true
+    })
+    setProfile(null)
   }
 
   const handleNext = (item) => {

@@ -15,7 +15,7 @@ import { toast } from 'react-toastify'
 const cx = classNames.bind(styles)
 
 function ModalLogin({ handleSwitchModal }) {
-  const { showModal, setShowModal, toggleModal, setIsAuthenticated } = useContext(AppContext)
+  const { showModal, setShowModal, toggleModal, setIsAuthenticated, setProfile } = useContext(AppContext)
   const {
     register,
     handleSubmit,
@@ -38,12 +38,13 @@ function ModalLogin({ handleSwitchModal }) {
 
   const onSubmit = handleSubmit((data) => {
     loginAccountMutation.mutate(data, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         setShowModal(false)
         toast.success('Login successfully', {
           autoClose: 2000
         })
         setIsAuthenticated(true)
+        setProfile(data.data.data)
       },
       onError: (err) => {
         if (err.response.status === 401) {

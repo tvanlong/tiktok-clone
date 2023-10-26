@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getSuggestedUsers } from '~/apis/suggestedUsers.api'
 import path from '~/constants/path'
@@ -17,6 +17,8 @@ import {
   UserGroupActiveIcon
 } from '~/constants/icons'
 import ListAcount from '~/components/ListAccount'
+import { AppContext } from '~/contexts/app.context'
+import Button from '~/components/Button'
 
 const cx = classNames.bind(styles)
 
@@ -24,6 +26,7 @@ const INIT_PAGE = 1
 const PER_PAGE = 20
 
 function Sidebar() {
+  const { isAuthenticated, toggleModal } = useContext(AppContext)
   const [suggestedUsers, setSuggestedUsers] = useState([])
   const [isSeeAll, setIsSeeAll] = useState(false)
   const { data } = useQuery({
@@ -54,12 +57,23 @@ function Sidebar() {
         <MenuItem title='LIVE' to={path.live} icon={<LiveIcon />} activeIcon={<LiveActiveIcon />} />
       </Menu>
 
-      <ListAcount
-        label='Suggested accounts'
-        data={suggestedUsers}
-        onViewChange={handleViewChange}
-        isSeeAll={isSeeAll}
-      />
+      {isAuthenticated && (
+        <ListAcount
+          label='Suggested accounts'
+          data={suggestedUsers}
+          onViewChange={handleViewChange}
+          isSeeAll={isSeeAll}
+        />
+      )}
+
+      {!isAuthenticated && (
+        <div className={cx('wrapper-login')}>
+          <p>Log in to follow creators, like videos, and view comments.</p>
+          <Button large primary className={cx('custom-login')} onClick={toggleModal}>
+            Log in
+          </Button>
+        </div>
+      )}
       {/* <ListAcount label='Following accounts' /> */}
     </aside>
   )

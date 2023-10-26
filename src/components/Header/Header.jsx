@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { AppContext } from '~/contexts/app.context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faLaptop } from '@fortawesome/free-solid-svg-icons'
@@ -21,7 +21,13 @@ import { menuItems, userMenu } from '~/constants/menu'
 const cx = classNames.bind(styles)
 
 function Header() {
-  const { toggleModal, isAuthenticated, setIsAuthenticated } = useContext(AppContext)
+  const { toggleModal, isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext)
+
+  useEffect(() => {
+    if (localStorage.getItem('profile')) {
+      setProfile(JSON.parse(localStorage.getItem('profile')))
+    }
+  }, [setProfile])
 
   return (
     <header className={cx('wrapper')}>
@@ -73,7 +79,11 @@ function Header() {
               <Menu items={userMenu} setIsAuthenticated={setIsAuthenticated}>
                 <Image
                   className={cx('avatar')}
-                  src='https://img6.thuthuatphanmem.vn/uploads/2022/11/18/anh-avatar-don-gian-ma-dep_081757969.jpg'
+                  {...(profile?.avatar
+                    ? { src: profile.avatar }
+                    : {
+                        src: ''
+                      })}
                   alt='avatar'
                 />
               </Menu>

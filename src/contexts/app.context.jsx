@@ -10,10 +10,13 @@ const initialState = {
 export const AppProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(initialState.isAuthenticated)
   const [showModal, setShowModal] = useState(false)
+  const [profile, setProfile] = useState(null)
   const toggleModal = () => setShowModal(!showModal)
 
   return (
-    <AppContext.Provider value={{ isAuthenticated, setIsAuthenticated, showModal, setShowModal, toggleModal }}>
+    <AppContext.Provider
+      value={{ isAuthenticated, setIsAuthenticated, showModal, setShowModal, toggleModal, profile, setProfile }}
+    >
       {children}
     </AppContext.Provider>
   )

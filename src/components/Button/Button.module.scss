@@ -75,6 +75,17 @@
   }
 }
 
+.custom-login {
+  width: 100%;
+  background-color: #fff;
+  color: var(--primary);
+  margin-top: 20px;
+
+  &:hover {
+    background-color: rgba(254, 44, 85, 0.06);
+  }
+}
+
 // Disabled
 
 // Button sizes

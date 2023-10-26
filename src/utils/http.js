@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import config from '~/constants/config'
-import { getAccessToken, removeAccessToken, saveAccessToken } from './auth'
+import { getAccessToken, removeAccessToken, removeProfile, saveAccessToken, saveProfile } from './auth'
 
 class Http {
   #accessToken // Khai báo private variable ES6
@@ -34,9 +34,11 @@ class Http {
         if (url.includes('login') || url.includes('register')) {
           this.#accessToken = response.data.meta.token
           saveAccessToken(this.#accessToken)
+          saveProfile(response.data.data)
         } else if (url.includes('logout')) {
           this.#accessToken = ''
           removeAccessToken()
+          removeProfile()
         }
         return response
       },
