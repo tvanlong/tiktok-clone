@@ -1,0 +1,24 @@
+.btn-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.custom-button {
+  display: inline-flex;
+  font-size: 2.4rem;
+  padding: 16px 16px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.react-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.amount {
+  font-size: 1.4rem;
+  opacity: 0.8;
+}

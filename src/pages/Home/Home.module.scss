@@ -1,6 +1,7 @@
 .container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .wrapper {
@@ -9,6 +10,7 @@
   align-items: center;
   width: 100%;
   max-width: 692px;
+  border-bottom: 1px solid #dbdbdb;
 }
 
 .list-item-container {
@@ -57,7 +59,23 @@
   max-width: 500px;
 }
 
+.video {
+  display: flex;
+}
+
 video {
-  width: 453px;
-  height: 567px;
+  height: 700px;
+  border-radius: 10px;
+  width: 394px;
+  // width: 100%;
+}
+
+.btn-react-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: end;
+  gap: 12px;
+  margin-left: 30px;
 }

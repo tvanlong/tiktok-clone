@@ -1,47 +1,67 @@
+import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
+import { faHeart, faCommentDots, faBookmark, faShare } from '@fortawesome/free-solid-svg-icons'
 import Image from '~/components/Image'
 import Button from '~/components/Button'
+import { getVideoList } from '~/apis/video.api'
+import VideoPlayer from '~/components/VideoPlayer'
+import ReactButton from '~/components/ReactButton'
 import classNames from 'classnames/bind'
 import styles from './Home.module.scss'
 
 const cx = classNames.bind(styles)
 
 function Home() {
+  const { data } = useQuery({
+    queryKey: ['videoList'],
+    queryFn: () => getVideoList('for-you', 15)
+  })
+  const videoList = data?.data?.data
+
   return (
     <div className={cx('container')}>
-      <div className={cx('wrapper')}>
-        <div className={cx('list-item-container')}>
-          <Link to=''>
-            <Image
-              className={cx('avatar')}
-              src='https://i.pinimg.com/originals/2b/0f/7a/2b0f7a9533237b7e9b49f62ba73b95dc.jpg'
-              alt=''
-            />
-          </Link>
-          <div className={cx('content-container')}>
-            <div className={cx('text-info')}>
-              <Link to='' className={cx('nickname')}>
-                nam.perdz
-              </Link>
-              <span className={cx('username')}>Nam Per fect</span>
-              <p className={cx('caption')}>
-                Đặc sản mùa hè #namper #flygentertainment #gcent #namperluxury #hobebar #lankhumui @KTS. Quốc Chính
-              </p>
-              <Button primary className={cx('custom-follow')}>
-                Follow
-              </Button>
-            </div>
-            <div className={cx('video')}>
-              <video controls autoPlay>
-                <source
-                  src='http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
-                  type='video/mp4'
-                />
-              </video>
+      {videoList?.map((video) => (
+        <div key={video.id} className={cx('wrapper')}>
+          <div className={cx('list-item-container')}>
+            <Link to=''>
+              <Image
+                className={cx('avatar')}
+                src={
+                  video.user.avatar !== 'https://files.fullstack.edu.vn/f8-tiktok/'
+                    ? video.user.avatar
+                    : 'https://i.pinimg.com/736x/9a/63/e1/9a63e148aaff53532b045f6d1f09d762.jpg'
+                }
+                alt={video.user.nickname}
+              />
+            </Link>
+            <div className={cx('content-container')}>
+              <div className={cx('text-info')}>
+                <Link to='' className={cx('nickname')}>
+                  {video.user.nickname}
+                </Link>
+                <span className={cx('username')}>
+                  {video.user.first_name} {video.user.last_name}
+                </span>
+                <p className={cx('caption')}>{video.description}</p>
+                {!video.is_liked && (
+                  <Button primary className={cx('custom-follow')}>
+                    Follow
+                  </Button>
+                )}
+              </div>
+              <div className={cx('video')}>
+                <VideoPlayer video={video} />
+                <div className={cx('btn-react-wrapper')}>
+                  <ReactButton icon={faHeart} count={video.likes_count} />
+                  <ReactButton icon={faCommentDots} count={video.comments_count} />
+                  <ReactButton icon={faBookmark} count={video.views_count} />
+                  <ReactButton icon={faShare} count={video.shares_count} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ))}
     </div>
   )
 }

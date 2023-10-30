@@ -6,7 +6,8 @@ body.active-modal {
   z-index: 99;
 }
 
-.modal, .overlay {
+.modal,
+.overlay {
   width: 100vw;
   height: 100vh;
   top: 0;
@@ -17,7 +18,7 @@ body.active-modal {
 }
 
 .overlay {
-  background: rgba(49,49,49,0.8);
+  background: rgba(49, 49, 49, 0.8);
 }
 
 .title {
@@ -92,7 +93,7 @@ body.active-modal {
 .text-signup {
   text-align: center;
   padding: 24px 0;
-  border-top: 1px solid ;
+  border-top: 1px solid;
   border-top: 0.5px solid rgba(22, 24, 35, 0.12);
   color: rgb(22, 24, 35);
   font-size: 1.5rem;

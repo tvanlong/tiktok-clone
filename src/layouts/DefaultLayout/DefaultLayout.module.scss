@@ -11,4 +11,11 @@
 
 .content {
   flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

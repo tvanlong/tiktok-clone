@@ -66,6 +66,15 @@ function Sidebar() {
         />
       )}
 
+      {isAuthenticated && (
+        <ListAcount
+          label='Suggested accounts'
+          data={suggestedUsers}
+          onViewChange={handleViewChange}
+          isSeeAll={isSeeAll}
+        />
+      )}
+
       {!isAuthenticated && (
         <div className={cx('wrapper-login')}>
           <p>Log in to follow creators, like videos, and view comments.</p>
