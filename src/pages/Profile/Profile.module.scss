@@ -1,0 +1,128 @@
+.container {
+  padding: 36px 24px 0;
+}
+
+.bottom-line {
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.info-wrapper {
+  max-width: 624px; 
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-title {
+  margin-left: 20px;
+  flex: 1;
+}
+
+.name {
+  font-size: 3.2rem;
+  font-weight: 800;
+}
+
+.nickname {
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.btn-follow {
+  height: 38px;
+  width: 50%;
+  font-size: 1.8rem;
+  margin-top: 16px;
+}
+
+.user-subinfo {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.count-info {
+  margin-right: 20px;
+  color: rgba(22, 24, 35, 1);
+  line-height: 24px;
+  font-size: 1.8rem;
+
+  strong {
+    font-weight: 800;
+  }
+
+  span {
+    margin-left: 6px;
+    line-height: 20px;
+    font-weight: 400;
+    color: rgba(22, 24, 35, .75);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.desc {
+  margin-top: 10px;
+  font-size: 1.8rem;
+}
+
+.url {
+  margin-top: 5px;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.videos-wrapper {
+  margin-top: 24px;
+  padding: 0 24px;
+}
+
+.videos-wrapper h4{
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.player {
+  position: relative;
+  float: left;
+}
+
+.user-video {
+  width: 208px;
+  height: 275px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+}
+
+.views {
+  position: absolute;
+  z-index: 1;
+  bottom: 10px;
+  left: 10px;
+  color: #fff;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}

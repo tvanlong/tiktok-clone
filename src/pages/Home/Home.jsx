@@ -6,10 +6,10 @@ import Button from '~/components/Button'
 import { getVideoList } from '~/apis/video.api'
 import VideoPlayer from '~/components/VideoPlayer'
 import ReactButton from '~/components/ReactButton'
-import classNames from 'classnames/bind'
-import styles from './Home.module.scss'
 import { followUser } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
+import classNames from 'classnames/bind'
+import styles from './Home.module.scss'
 
 const cx = classNames.bind(styles)
 
