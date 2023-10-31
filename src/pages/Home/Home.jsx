@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { faHeart, faCommentDots, faBookmark, faShare } from '@fortawesome/free-solid-svg-icons'
 import Image from '~/components/Image'
@@ -8,15 +8,32 @@ import VideoPlayer from '~/components/VideoPlayer'
 import ReactButton from '~/components/ReactButton'
 import classNames from 'classnames/bind'
 import styles from './Home.module.scss'
+import { followUser } from '~/apis/auth.api'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 
 function Home() {
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['videoList'],
     queryFn: () => getVideoList('for-you', 15)
   })
   const videoList = data?.data?.data
+
+  const followAccountMutation = useMutation({
+    mutationFn: (id) => followUser(id)
+  })
+
+  const handleFollow = (id) => {
+    followAccountMutation.mutate(id, {
+      onSuccess: () => {
+        refetch()
+        toast.success('Followed', {
+          timeClose: 1000
+        })
+      }
+    })
+  }
 
   return (
     <div className={cx('container')}>
@@ -43,8 +60,8 @@ function Home() {
                   {video.user.first_name} {video.user.last_name}
                 </span>
                 <p className={cx('caption')}>{video.description}</p>
-                {!video.is_liked && (
-                  <Button primary className={cx('custom-follow')}>
+                {!video.user.is_followed && (
+                  <Button primary className={cx('custom-follow')} onClick={() => handleFollow(video.user.id)}>
                     Follow
                   </Button>
                 )}

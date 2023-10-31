@@ -1,6 +1,4 @@
-import { useContext, useEffect, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { getSuggestedUsers } from '~/apis/suggestedUsers.api'
+import { useContext } from 'react'
 import path from '~/constants/path'
 import Menu from './Menu'
 import MenuItem from './MenuItem'
@@ -16,37 +14,15 @@ import {
   LiveActiveIcon,
   UserGroupActiveIcon
 } from '~/constants/icons'
-import ListAcount from '~/components/ListAccount'
 import { AppContext } from '~/contexts/app.context'
 import Button from '~/components/Button'
+import SuggestedUsers from './SuggestedUsers'
+import FollowingUsers from './FollowingUsers'
 
 const cx = classNames.bind(styles)
 
-const INIT_PAGE = 1
-const PER_PAGE = 20
-
 function Sidebar() {
   const { isAuthenticated, toggleModal } = useContext(AppContext)
-  const [suggestedUsers, setSuggestedUsers] = useState([])
-  const [isSeeAll, setIsSeeAll] = useState(false)
-  const { data } = useQuery({
-    queryKey: ['suggestedUsers'],
-    queryFn: () => getSuggestedUsers(INIT_PAGE, PER_PAGE)
-  })
-
-  useEffect(() => {
-    if (data) {
-      setSuggestedUsers(data.data.data)
-    }
-  }, [data])
-
-  const handleViewChange = () => {
-    if (isSeeAll) {
-      setIsSeeAll(false)
-    } else {
-      setIsSeeAll(true)
-    }
-  }
 
   return (
     <aside className={cx('wrapper')}>
@@ -58,21 +34,10 @@ function Sidebar() {
       </Menu>
 
       {isAuthenticated && (
-        <ListAcount
-          label='Suggested accounts'
-          data={suggestedUsers}
-          onViewChange={handleViewChange}
-          isSeeAll={isSeeAll}
-        />
-      )}
-
-      {isAuthenticated && (
-        <ListAcount
-          label='Suggested accounts'
-          data={suggestedUsers}
-          onViewChange={handleViewChange}
-          isSeeAll={isSeeAll}
-        />
+        <>
+          <SuggestedUsers />
+          <FollowingUsers />
+        </>
       )}
 
       {!isAuthenticated && (
@@ -83,7 +48,6 @@ function Sidebar() {
           </Button>
         </div>
       )}
-      {/* <ListAcount label='Following accounts' /> */}
     </aside>
   )
 }

@@ -4,15 +4,34 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import styles from './AccountPreview.module.scss'
 import classNames from 'classnames/bind'
+import { useMutation } from '@tanstack/react-query'
+import { followUser } from '~/apis/auth.api'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 
 function AccountPreview({ user }) {
+  const { mutate } = useMutation({
+    mutationFn: (id) => followUser(id)
+  })
+
+  const handleFollow = (id, event) => {
+    mutate(id, {
+      onSuccess: () => {
+        window.location.reload()
+        // window.history.pushState({}, '', `/@${user.nickname}`) Nếu ấn follow thì chuyển sang trang profile của user đó
+        toast.success('Followed', {
+          timeClose: 1000
+        })
+      }
+    })
+  }
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('header')}>
         <img className={cx('avatar')} src={user.avatar} alt={user.nickname} />
-        <Button className={cx('follow-btn')} primary>
+        <Button className={cx('follow-btn')} primary onClick={(event) => handleFollow(user.id, event)}>
           Follow
         </Button>
       </div>

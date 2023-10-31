@@ -14,9 +14,18 @@ function VideoPlayer({ video }) {
           }
         })
       },
-      { threshold: 0.3 }
+      { threshold: 0.8 }
     )
-    observer.observe(videoRef.current)
+    const currentVideoRef = videoRef.current
+
+    observer.observe(currentVideoRef)
+
+    // Hủy đăng ký IntersectionObserver khi component bị unmount (cleanup function)
+    return () => {
+      if (currentVideoRef) {
+        observer.unobserve(currentVideoRef)
+      }
+    }
   }, [videoRef])
 
   return (
