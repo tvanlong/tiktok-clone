@@ -49,7 +49,8 @@ export const menuItems = [
 export const userMenu = [
   {
     icon: <FontAwesomeIcon icon={faUser} />,
-    title: 'View profile'
+    title: 'View profile',
+    profile: true
   },
   {
     icon: <FontAwesomeIcon icon={faBookmark} />,

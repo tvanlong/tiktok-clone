@@ -38,6 +38,19 @@
   font-weight: 600;
 }
 
+.btn-edit {
+  height: 38px;
+  width: 50%;
+  font-size: 1.6rem;
+  margin-top: 16px;
+  background-color: #fff;
+  border: 1px solid rgba(22, 24, 35, .12);
+
+  &:hover {
+    background-color: rgba(22, 24, 35, .03);
+  }
+}
+
 .btn-follow {
   height: 38px;
   width: 50%;
@@ -104,6 +117,8 @@
 .player {
   position: relative;
   float: left;
+  margin-right: 16px;
+  margin-bottom: 16px;
 }
 
 .user-video {
@@ -112,7 +127,6 @@
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
-  margin-right: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
 }
 

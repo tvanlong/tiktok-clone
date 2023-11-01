@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import styles from './AccountItem.module.scss'
 import classNames from 'classnames/bind'
+import { Link } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 
@@ -23,7 +24,7 @@ function AccountItem({ user }) {
 
   if (user.is_followed) {
     return (
-      <div className={cx('account-item')}>
+      <Link to={`/@${user.nickname}`} className={cx('account-item')}>
         <Image className={cx('avatar')} src={user.avatar} alt={user.nickname} />
         <div className={cx('item-info')}>
           <p className={cx('nickname')}>
@@ -34,13 +35,13 @@ function AccountItem({ user }) {
             {user.first_name} {user.last_name}
           </p>
         </div>
-      </div>
+      </Link>
     )
   } else {
     return (
       <div>
         <Tippy interactive delay={[800, 0]} offset={[0, -20]} placement='right' render={renderPreview}>
-          <div className={cx('account-item')}>
+          <Link to={`/@${user.nickname}`} className={cx('account-item')}>
             <Image className={cx('avatar')} src={user.avatar} alt={user.nickname} />
             <div className={cx('item-info')}>
               <p className={cx('nickname')}>
@@ -51,7 +52,7 @@ function AccountItem({ user }) {
                 {user.first_name} {user.last_name}
               </p>
             </div>
-          </div>
+          </Link>
         </Tippy>
       </div>
     )

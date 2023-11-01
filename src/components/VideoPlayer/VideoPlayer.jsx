@@ -11,6 +11,7 @@ function VideoPlayer({ video }) {
             videoRef.current.play()
           } else {
             videoRef.current.pause()
+            videoRef.current.currentTime = 0
           }
         })
       },

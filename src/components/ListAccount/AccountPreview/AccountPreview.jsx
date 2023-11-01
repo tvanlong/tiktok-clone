@@ -7,22 +7,23 @@ import classNames from 'classnames/bind'
 import { useMutation } from '@tanstack/react-query'
 import { followUser } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 
 function AccountPreview({ user }) {
+  const navigate = useNavigate()
   const { mutate } = useMutation({
     mutationFn: (id) => followUser(id)
   })
 
-  const handleFollow = (id, event) => {
+  const handleFollow = (id) => {
     mutate(id, {
       onSuccess: () => {
-        window.location.reload()
-        // window.history.pushState({}, '', `/@${user.nickname}`) Nếu ấn follow thì chuyển sang trang profile của user đó
         toast.success('Followed', {
           timeClose: 1000
         })
+        navigate(`/@${user.nickname}`)
       }
     })
   }
@@ -31,7 +32,7 @@ function AccountPreview({ user }) {
     <div className={cx('wrapper')}>
       <div className={cx('header')}>
         <img className={cx('avatar')} src={user.avatar} alt={user.nickname} />
-        <Button className={cx('follow-btn')} primary onClick={(event) => handleFollow(user.id, event)}>
+        <Button className={cx('follow-btn')} primary onClick={() => handleFollow(user.id)}>
           Follow
         </Button>
       </div>

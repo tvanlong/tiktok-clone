@@ -11,10 +11,13 @@ import { logoutAccount } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
 import { AppContext } from '~/contexts/app.context'
 import { useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { getProfile } from '~/utils/auth'
 
 const cx = classNames.bind(styles)
 
 function Menu({ children, items = [], setIsAuthenticated }) {
+  const navigate = useNavigate()
   const { setProfile } = useContext(AppContext)
   const [history, setHistory] = useState([{ data: items }])
   const current = history[history.length - 1]
@@ -51,6 +54,11 @@ function Menu({ children, items = [], setIsAuthenticated }) {
     setHistory((prev) => prev.slice(0, 1))
   }
 
+  const handleViewProfile = () => {
+    const user = getProfile()
+    navigate(`/@${user.nickname}`)
+  }
+
   const renderItems = () => {
     return current.data.map((item, index) => {
       return (
@@ -62,6 +70,7 @@ function Menu({ children, items = [], setIsAuthenticated }) {
           disabled={logoutMutation.isPending}
           {...(item.children && { onClick: () => handleNext(item) })} // Nếu có children thì onClick sẽ là handleNext
           {...(item.logout && { onClick: handleLogout })} // Nếu có logout thì onClick sẽ là setIsAuthenticated
+          {...(item.profile && { onClick: handleViewProfile })} // Nếu có profile thì onClick sẽ là handleViewProfile
         >
           {item.title}
         </Button>

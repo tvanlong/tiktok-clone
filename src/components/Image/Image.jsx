@@ -8,8 +8,8 @@ const Image = forwardRef(({ ...props }, ref) => {
 })
 
 Image.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired
+  src: PropTypes.string,
+  alt: PropTypes.string
 }
 
 export default Image
