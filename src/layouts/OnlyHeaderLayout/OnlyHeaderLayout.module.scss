@@ -1,0 +1,11 @@
+.container {
+  width: var(--default-layout-width);
+  margin: 0 auto;
+  display: flex;
+  margin-top: 60px;
+}
+
+.content {
+  flex: 1;
+  height: calc(100vh - 60px);
+}

@@ -1,17 +1,19 @@
-import classNames from 'classnames/bind'
-import styles from './Profile.module.scss'
 import Image from '~/components/Image'
 import Button from '~/components/Button'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { LinkIcon, PlayIcon } from '~/constants/icons'
 import { useQuery } from '@tanstack/react-query'
 import { getProfile } from '~/apis/auth.api'
 import { getProfile as getProfileFromLS } from '~/utils/auth'
+import classNames from 'classnames/bind'
+import styles from './Profile.module.scss'
+import path from '~/constants/path'
 
 const cx = classNames.bind(styles)
 
 function Profile() {
   const { nickname } = useParams()
+  const navigate = useNavigate()
   const { data: userData } = useQuery({
     queryKey: ['user', nickname],
     queryFn: () => getProfile(nickname)
@@ -19,6 +21,16 @@ function Profile() {
 
   const user = userData?.data.data
   const videos = user?.videos
+
+  const navigateToEditProfile = () => {
+    user &&
+      navigate(path.editProfile, {
+        // navigate to edit profile page with user data
+        state: {
+          user
+        }
+      })
+  }
 
   return (
     <div>
@@ -33,7 +45,9 @@ function Profile() {
                   {user?.first_name} {user?.last_name}
                 </div>
                 {user && user.nickname === getProfileFromLS().nickname ? (
-                  <Button className={cx('btn-edit')}>Edit Profile</Button>
+                  <Button className={cx('btn-edit')} onClick={navigateToEditProfile}>
+                    Edit Profile
+                  </Button>
                 ) : user?.is_followed ? (
                   <Button className={cx('btn-follow')} primary>
                     Unfollow

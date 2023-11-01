@@ -23,7 +23,11 @@ function AccountPreview({ user }) {
         toast.success('Followed', {
           timeClose: 1000
         })
-        navigate(`/@${user.nickname}`)
+        navigate(`/@${user.nickname}`, {
+          state: {
+            user
+          }
+        })
       }
     })
   }

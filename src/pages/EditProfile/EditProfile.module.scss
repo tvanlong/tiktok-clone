@@ -1,0 +1,150 @@
+.wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.content {
+  padding: 32px 16px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 12px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+}
+
+.edit-container {
+  height: 700px;
+}
+
+.header-container {
+  padding: 24px 24px 12px;
+  border-bottom: 0.5px solid rgba(22, 24, 35, 0.2);
+}
+
+.header-title {
+  font-weight: 600;
+  font-size: 2.4rem;
+  color: rgb(22, 24, 35);
+}
+
+.content-container {
+  width: 700px;
+  padding: 8px 24px 0px;
+}
+
+.item-container {
+  padding: 16px 0px;
+  display: flex;
+  border-bottom: 0.5px solid rgba(22, 24, 35, 0.12);
+}
+
+.label {
+  font-weight: 600;
+  line-height: 2.4rem;
+  font-size: 16px;
+  width: 120px;
+  margin-right: 24px;
+}
+
+.avatar-content {
+  position: relative;
+  height: 96px;
+}
+
+.avatar img {
+  width: 96px;
+  border-radius: 50%;
+  margin-left: 128px;
+}
+
+.avatar-edit {
+  width: 32px;
+  height: 32px;
+  background: rgb(255, 255, 255);
+  border: 1px solid rgb(208, 208, 211);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-edit-input {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.edit-area {
+  input {
+    width: 360px;
+    height: 38px;
+    border-radius: 4px;
+    background: rgba(22, 24, 35, 0.06);
+    font-size: 1.6rem;
+    color: rgb(22, 24, 35);
+    line-height: 24px;
+    padding: 7px 12px;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: rgba(22, 24, 35, 0.75);
+    line-height: 18px;
+    max-width: 460px;
+    overflow: hidden;
+    margin-top: 8px;
+    width: 360px;
+  }
+
+  textarea {
+    width: 360px;
+    border-radius: 4px;
+    background: rgba(22, 24, 35, 0.06);
+    caret-color: rgb(254, 44, 85);
+    font-size: 1.6rem;
+    color: rgb(22, 24, 35);
+    line-height: 24px;
+    outline: none;
+    border: none;
+    height: 100px;
+    padding: 12px;
+    resize: none;
+  }
+}
+
+.footer-container {
+  height: 86px;
+  display: flex;
+  padding: 0px 24px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.btn-save {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 4px;
+  color: rgb(22, 24, 35);
+  border-color: rgba(22, 24, 35, 0.12);
+  background-color: rgb(255, 255, 255);
+  min-height: 28px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  line-height: 24px;
+  padding: 7px 16px;
+  min-width: 96px;
+
+  &:hover {
+    border-color: rgb(208, 209, 211);
+    background-color: rgb(248, 248, 248);
+  }
+}

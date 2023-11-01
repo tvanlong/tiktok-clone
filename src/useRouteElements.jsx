@@ -1,4 +1,7 @@
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
+import { useContext } from 'react'
+import { AppContext } from '~/contexts/app.context'
+import { toast } from 'react-toastify'
 import Home from '~/pages/Home'
 import Following from '~/pages/Following'
 import Explore from '~/pages/Explore'
@@ -8,9 +11,7 @@ import Profile from '~/pages/Profile'
 import Search from '~/pages/Search'
 import DefaultLayout from '~/layouts/DefaultLayout'
 import OnlyHeaderLayout from '~/layouts/OnlyHeaderLayout'
-import { useContext } from 'react'
-import { AppContext } from '~/contexts/app.context'
-import { toast } from 'react-toastify'
+import EditProfile from './pages/EditProfile'
 import path from '~/constants/path'
 
 function ProtectedRoute() {
@@ -64,6 +65,14 @@ function useRouteElements() {
           element: (
             <OnlyHeaderLayout>
               <Upload />
+            </OnlyHeaderLayout>
+          )
+        },
+        {
+          path: path.editProfile,
+          element: (
+            <OnlyHeaderLayout>
+              <EditProfile />
             </OnlyHeaderLayout>
           )
         }

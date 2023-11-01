@@ -4,6 +4,7 @@ const path = {
   explore: '/explore',
   live: '/live',
   nickname: '/:nickname',
+  editProfile: '/edit-profile',
   search: '/search',
   upload: '/upload'
 }

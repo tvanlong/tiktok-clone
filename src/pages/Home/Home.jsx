@@ -40,7 +40,7 @@ function Home() {
       {videoList?.map((video) => (
         <div key={video.id} className={cx('wrapper')}>
           <div className={cx('list-item-container')}>
-            <Link to=''>
+            <Link to={`/@${video.user.nickname}`}>
               <Image
                 className={cx('avatar')}
                 src={
@@ -53,7 +53,7 @@ function Home() {
             </Link>
             <div className={cx('content-container')}>
               <div className={cx('text-info')}>
-                <Link to='' className={cx('nickname')}>
+                <Link to={`/@${video.user.nickname}`} className={cx('nickname')}>
                   {video.user.nickname}
                 </Link>
                 <span className={cx('username')}>
