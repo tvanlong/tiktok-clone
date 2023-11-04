@@ -3,17 +3,76 @@ import styles from './EditProfile.module.scss'
 import Image from '~/components/Image'
 import { EditAvatar } from '~/constants/icons'
 import Button from '~/components/Button'
-import { useLocation } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { userSchema } from '~/utils/rules'
+import { useContext, useEffect } from 'react'
+import { getCurrentUser, updateProfile } from '~/apis/auth.api'
+import { getProfile as getProfileFromLS } from '~/utils/auth'
+import { AppContext } from '~/contexts/app.context'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 
 function EditProfile() {
-  const location = useLocation()
-  const { user } = location.state
+  const { setProfile } = useContext(AppContext)
+  // Cách 1: sử dụng location.state để lấy thông tin user hiện tại
+  // const location = useLocation()
+  // const {user} = location.state
+  // Cách 2: fetch API để lấy thông tin user hiện tại
+  const { data: userData, refetch } = useQuery({
+    queryKey: ['user'],
+    queryFn: () => getCurrentUser(getProfileFromLS().nickname)
+  })
+  const user = userData?.data.data
+  const updateProfileMutation = useMutation({
+    mutationFn: (data) => updateProfile(data)
+  })
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue
+  } = useForm({
+    defaultValues: {
+      first_name: '',
+      last_name: '',
+      nickname: '',
+      bio: ''
+    },
+    resolver: yupResolver(userSchema)
+  })
+
+  useEffect(() => {
+    if (user) {
+      setValue('first_name', user.first_name)
+      setValue('last_name', user.last_name)
+      setValue('nickname', user.nickname)
+      setValue('bio', user.bio)
+    }
+  }, [setValue, user])
+
+  const onSubmit = handleSubmit(async (data) => {
+    const form = new FormData()
+    const addToFormData = ['first_name', 'last_name', 'nickname', 'bio']
+    addToFormData.forEach((key) => {
+      form.append(key, data[key])
+    })
+    const res = await updateProfileMutation.mutateAsync(form)
+    setProfile(res.data.data)
+    localStorage.setItem('profile', JSON.stringify(res.data.data))
+    refetch()
+    toast.success('Your profile is updated', {
+      autoClose: 2000,
+      theme: 'colored'
+    })
+  })
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('content')}>
-        <div className={cx('edit-container')}>
+        <form className={cx('edit-container')} onSubmit={onSubmit}>
           <div className={cx('header-container')}>
             <h1 className={cx('header-title')}>Edit Profile</h1>
           </div>
@@ -22,7 +81,7 @@ function EditProfile() {
               <div className={cx('label')}>Profile photo</div>
               <div className={cx('avatar-content')}>
                 <div className={cx('avatar')}>
-                  <Image src={user.avatar} alt={user.nickname} />
+                  <Image src={user?.avatar} alt={user?.nickname} />
                 </div>
                 <div className={cx('avatar-edit')}>
                   <EditAvatar />
@@ -35,10 +94,13 @@ function EditProfile() {
               </div>
             </div>
             <div className={cx('item-container')}>
-              <div className={cx('label')}>Username</div>
+              <div className={cx('label')}>User Name</div>
               <div className={cx('edit-area')}>
-                <input type='text' defaultValue={`${user.first_name} ${user.last_name}`} placeholder='Username'></input>
-                <p>www.tiktok.com/@{user.nickname}</p>
+                <input type='text' placeholder='First Name' {...register('first_name')}></input>
+                <div className={cx('err')}>{errors.first_name?.message}</div>
+                <input type='text' placeholder='Last Name' {...register('last_name')}></input>
+                <div className={cx('err')}>{errors.last_name?.message}</div>
+                <p>www.tiktok.com/@{user?.nickname}</p>
                 <p>
                   Usernames can only contain letters, numbers, underscores, and periods. Changing your username will
                   also change your profile link.
@@ -46,16 +108,18 @@ function EditProfile() {
               </div>
             </div>
             <div className={cx('item-container')}>
-              <div className={cx('label')}>Name</div>
+              <div className={cx('label')}>Nick Name</div>
               <div className={cx('edit-area')}>
-                <input type='text' defaultValue={user.nickname} placeholder='Nickname'></input>
+                <input type='text' placeholder='Nickname' {...register('nickname')}></input>
+                <div className={cx('err')}>{errors.nickname?.message}</div>
                 <p>Your nickname can only be changed once every 7 days.</p>
               </div>
             </div>
             <div className={cx('item-container')}>
               <div className={cx('label')}>Bio</div>
               <div className={cx('edit-area')}>
-                <textarea defaultValue={user.bio} placeholder='Bio'></textarea>
+                <textarea defaultValue={user?.bio} placeholder='Bio' {...register('bio')}></textarea>
+                <div className={cx('err')}>{errors.bio?.message}</div>
                 <p>0/80</p>
               </div>
             </div>
@@ -63,7 +127,7 @@ function EditProfile() {
           <div className={cx('footer-container')}>
             <Button className={cx('btn-save')}>Save</Button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   )

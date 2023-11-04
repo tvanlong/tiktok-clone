@@ -23,13 +23,15 @@ function Profile() {
   const videos = user?.videos
 
   const navigateToEditProfile = () => {
-    user &&
-      navigate(path.editProfile, {
-        // navigate to edit profile page with user data
-        state: {
-          user
-        }
-      })
+    // Cách 1: sử dụng location.state để truyền thông tin user hiện tại
+    // navigate(path.editProfile, {
+    //   state: {
+    //     user
+    //   }
+    // })
+
+    // Cách 2: fetch API để lấy thông tin user hiện tại
+    user && navigate(path.editProfile)
   }
 
   return (

@@ -33,3 +33,22 @@ export const schemaLogin = yup.object({
     .max(160, 'Password must not exceed 160 characters')
     .required('Password is required')
 })
+
+export const userSchema = yup.object({
+  first_name: yup
+    .string()
+    .min(3, 'First name must be at least 3 characters')
+    .max(160, 'First name must not exceed 160 characters')
+    .required('First name is required'),
+  last_name: yup
+    .string()
+    .min(3, 'Last name must be at least 3 characters')
+    .max(160, 'Last name must not exceed 160 characters')
+    .required('Last name is required'),
+  nickname: yup
+    .string()
+    .min(3, 'Name must be at least 3 characters')
+    .max(160, 'Name must not exceed 160 characters')
+    .required('Name is required'),
+  bio: yup.string().max(80, 'Bio must not exceed 80 characters').required('Bio is required')
+})
