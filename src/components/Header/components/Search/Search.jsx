@@ -9,6 +9,9 @@ import styles from './Search.module.scss'
 import useDebounce from '~/hooks/useDebounce'
 import { getSearchUsers } from '~/apis/searchUsers.api'
 import { useQuery } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { createSearchParams, useNavigate } from 'react-router-dom'
+import path from '~/constants/path'
 
 const cx = classNames.bind(styles)
 
@@ -18,44 +21,13 @@ function Search() {
   const [showSearchResult, setShowSearchResult] = useState(true)
   const [loading, setLoading] = useState(false)
   const debouncedValue = useDebounce(searchValue, 500) // Dùng để giảm số lần gọi API khi người dùng nhập vào ô search
-  const inputRef = useRef(null)
-
-  // Fetch API bằng fetch và useEffect
-  // useEffect(() => {
-  //   if (!debouncedValue.trim()) {
-  //     setSearchResult([])
-  //     return
-  //   }
-  //   fetch(`https://tiktok.fullstack.edu.vn/api/users/search?q=${encodeURIComponent(debouncedValue)}&type=less`)
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       setSearchResult(res.data)
-  //       setLoading(false)
-  //     })
-  //     .catch((err) => {
-  //       console.log(err)
-  //       setLoading(false)
-  //     })
-  // }, [debouncedValue])
-
-  // --------------------------------------------------------------------------------
-
-  // Fecth API bằng axios và useEffect
-  // useEffect(() => {
-  //   if (!debouncedValue.trim()) {
-  //     setSearchResult([])
-  //     return
-  //   }
-  //   getSearchUsers(debouncedValue, 'less')
-  //     .then((res) => {
-  //       setSearchResult(res.data.data)
-  //     })
-  //     .finally(() => {
-  //       setLoading(false)
-  //     })
-  // }, [debouncedValue])
-
-  // --------------------------------------------------------------------------------
+  const inputRef = useRef()
+  const { handleSubmit, setValue } = useForm({
+    defaultValues: {
+      q: ''
+    }
+  })
+  const navigate = useNavigate()
 
   // Fetch data với useQuery và axios
   const { data } = useQuery({
@@ -83,6 +55,12 @@ function Search() {
     }
   }, [debouncedValue])
 
+  useEffect(() => {
+    if (searchValue) {
+      setValue('q', searchValue)
+    }
+  }, [searchValue, setValue])
+
   const handleClear = () => {
     setSearchValue('')
     inputRef.current.focus()
@@ -103,6 +81,20 @@ function Search() {
     </div>
   )
 
+  const onSubmit = handleSubmit((data) => {
+    setSearchValue('')
+    setShowSearchResult(false)
+    inputRef.current.blur() // Tắt focus ô search
+    navigate({
+      pathname: path.search,
+      search: createSearchParams({
+        ...data,
+        page: 1,
+        type: 'more'
+      }).toString() // Tạo query string từ object data
+    })
+  })
+
   return (
     <div>
       <Tippy
@@ -111,10 +103,10 @@ function Search() {
         render={renderResult}
         onClickOutside={handleHideSearchResult}
       >
-        <div className={cx('search')}>
+        <form className={cx('search')} onSubmit={onSubmit}>
           <input
             ref={inputRef}
-            placeholder='Search'
+            placeholder='Search accounts'
             spellCheck={false}
             value={searchValue}
             onChange={(e) => {
@@ -129,10 +121,10 @@ function Search() {
             </button>
           )}
           {loading && <FontAwesomeIcon className={cx('loading')} icon={faSpinner} />}
-          <button className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
+          <button type='submit' className={cx('search-btn')} onMouseDown={(e) => e.preventDefault()}>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
-        </div>
+        </form>
       </Tippy>
     </div>
   )

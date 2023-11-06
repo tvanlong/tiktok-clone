@@ -7,3 +7,8 @@ export const getSearchUsers = (q, type) =>
       type
     }
   })
+
+export const getSearchUsersByPage = (params) =>
+  http.get('users/search', {
+    params
+  })

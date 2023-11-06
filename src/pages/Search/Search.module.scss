@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  margin: 0 auto;
+  position: relative;
+  min-width: 420px;
+  justify-content: center;
+}
+.wrapper {
+  padding: 32px 16px 67px;
+  width: 800px;
+  max-width: 800px;
+}
+
+.search-account {
+  margin-top: 16px;
+}
+
+.search-user {
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(22, 24, 35, 0.03);
+  }
+}
+
+.avatar {
+  margin: 16px;
+
+  img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+}
+
+.info {
+  margin: 16px;
+}
+
+.name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+.username {
+  color: rgba(22, 24, 35, 0.75);
+  font-size: 1.4rem;
+  line-height: 18px;
+  margin-top: 1px;
+}
+
+.bio {
+  margin-top: 4px; 
+  font-size: 1.4rem;
+  font-weight: 500; 
+}
