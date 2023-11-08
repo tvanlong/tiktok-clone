@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 import { getSearchUsersByPage } from '~/apis/searchUsers.api'
 import useQueryConfig from '~/hooks/useQueryConfig'
 import { Link } from 'react-router-dom'
+import { useQueryClient } from '@tanstack/react-query'
+import { getProfile } from '~/apis/auth.api'
 import Pagination from '~/components/Pagination'
 import classNames from 'classnames/bind'
 import styles from './Search.module.scss'
@@ -9,19 +11,32 @@ import styles from './Search.module.scss'
 const cx = classNames.bind(styles)
 
 function Search() {
+  const queryClient = useQueryClient()
   const queryConfig = useQueryConfig()
   const { data: accountsData } = useQuery({
     queryKey: ['accounts', queryConfig],
     queryFn: () => getSearchUsersByPage(queryConfig)
   })
   const accounts = accountsData?.data.data
+  const handlePrefetchingUser = (nickname) => {
+    queryClient.prefetchQuery({
+      queryKey: ['user', nickname],
+      queryFn: () => getProfile(nickname),
+      staleTime: 1000 * 10 // Kiểm tra cache sau 10s khi hover vào account item
+    })
+  }
   return (
     <>
       <div className={cx('container')}>
         <div className={cx('wrapper')}>
           <div className={cx('search-account')}>
             {accounts?.map((account) => (
-              <Link to={`/@${account.nickname}`} key={account.id} className={cx('search-user')}>
+              <Link
+                to={`/@${account.nickname}`}
+                key={account.id}
+                className={cx('search-user')}
+                onMouseEnter={() => handlePrefetchingUser(`@${account.nickname}`)}
+              >
                 <div className={cx('avatar')}>
                   <img
                     src={

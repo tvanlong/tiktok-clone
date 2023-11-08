@@ -4,15 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import styles from './AccountPreview.module.scss'
 import classNames from 'classnames/bind'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { followUser } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
 
 const cx = classNames.bind(styles)
 
 function AccountPreview({ user }) {
-  const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const { mutate } = useMutation({
     mutationFn: (id) => followUser(id)
   })
@@ -23,10 +22,14 @@ function AccountPreview({ user }) {
         toast.success('Followed', {
           timeClose: 1000
         })
-        navigate(`/@${user.nickname}`, {
-          state: {
-            user
-          }
+        // refetch data mỗi khi follow user
+        queryClient.invalidateQueries({
+          queryKey: ['followingUsers'],
+          exact: true
+        })
+        queryClient.invalidateQueries({
+          queryKey: ['suggestedUsers'],
+          exact: true
         })
       }
     })

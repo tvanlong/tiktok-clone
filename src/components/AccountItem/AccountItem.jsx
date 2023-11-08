@@ -4,12 +4,26 @@ import classNames from 'classnames/bind'
 import styles from './AccountItem.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { useQueryClient } from '@tanstack/react-query'
+import { getProfile } from '~/apis/auth.api'
 
 const cx = classNames.bind(styles)
 
 function AccountItem({ data }) {
+  const queryClient = useQueryClient()
+  const handlePrefetchingUser = (nickname) => {
+    queryClient.prefetchQuery({
+      queryKey: ['user', nickname],
+      queryFn: () => getProfile(nickname),
+      staleTime: 1000 * 10 // Kiểm tra cache sau 10s khi hover vào account item
+    })
+  }
   return (
-    <Link to={`/@${data.nickname}`} className={cx('wrapper')}>
+    <Link
+      to={`/@${data.nickname}`}
+      className={cx('wrapper')}
+      onMouseEnter={() => handlePrefetchingUser(`@${data.nickname}`)}
+    >
       <img className={cx('avatar')} src={data.avatar} alt={data.full_name} />
       <div className={cx('info')}>
         <h4 className={cx('name')}>

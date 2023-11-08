@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Image from '~/components/Image'
 import Button from '~/components/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -15,25 +15,24 @@ const cx = classNames.bind(styles)
 
 function Profile() {
   const { isAuthenticated, setShowModal } = useContext(AppContext)
+  const [user, setUser] = useState()
   const { nickname } = useParams()
   const navigate = useNavigate()
   const { data: userData } = useQuery({
     queryKey: ['user', nickname],
-    queryFn: () => getProfile(nickname)
+    queryFn: () => getProfile(nickname),
+    staleTime: 1000 * 10 // Nếu dữ liệu từ lúc hover tới lúc click vào account item chưa quá 10s thì ko fetch lại
+    // Không fetch lại đồng nghĩa với việc sẽ không có data, nên sẽ phải dùng useEffect để set data
   })
 
-  const user = userData?.data.data
-  const videos = user?.videos
+  // Nếu không gọi API thì dùng cách này để lấy thông tin user hiện tại
+  useEffect(() => {
+    if (userData) {
+      setUser(userData.data.data)
+    }
+  }, [userData])
 
   const navigateToEditProfile = () => {
-    // Cách 1: sử dụng location.state để truyền thông tin user hiện tại
-    // navigate(path.editProfile, {
-    //   state: {
-    //     user
-    //   }
-    // })
-
-    // Cách 2: fetch API để lấy thông tin user hiện tại
     user && navigate(path.editProfile)
   }
 
@@ -102,7 +101,7 @@ function Profile() {
       <div className={cx('videos-wrapper')}>
         <h4>Videos</h4>
         <div className={cx('videos')}>
-          {videos?.map((video, index) => (
+          {user.videos.map((video, index) => (
             <div className={cx('player')} key={video.id || index}>
               <video
                 className={cx('user-video')}

@@ -17,10 +17,6 @@ const cx = classNames.bind(styles)
 
 function EditProfile() {
   const { setProfile } = useContext(AppContext)
-  // Cách 1: sử dụng location.state để lấy thông tin user hiện tại
-  // const location = useLocation()
-  // const {user} = location.state
-  // Cách 2: fetch API để lấy thông tin user hiện tại
   const { data: userData, refetch } = useQuery({
     queryKey: ['user'],
     queryFn: () => getCurrentUser(getProfileFromLS().nickname)

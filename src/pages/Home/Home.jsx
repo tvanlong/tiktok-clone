@@ -8,12 +8,15 @@ import VideoPlayer from '~/components/VideoPlayer'
 import ReactButton from '~/components/ReactButton'
 import { followUser } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
+import { useQueryClient } from '@tanstack/react-query'
+import { getProfile } from '~/apis/auth.api'
 import classNames from 'classnames/bind'
 import styles from './Home.module.scss'
 
 const cx = classNames.bind(styles)
 
 function Home() {
+  const queryClient = useQueryClient()
   const { data, refetch } = useQuery({
     queryKey: ['videoList'],
     queryFn: () => getVideoList('for-you', 15)
@@ -23,6 +26,14 @@ function Home() {
   const followAccountMutation = useMutation({
     mutationFn: (id) => followUser(id)
   })
+
+  const handlePrefetchingUser = (nickname) => {
+    queryClient.prefetchQuery({
+      queryKey: ['user', nickname],
+      queryFn: () => getProfile(nickname),
+      staleTime: 1000 * 10 // Kiểm tra cache sau 10s khi hover vào account item
+    })
+  }
 
   const handleFollow = (id) => {
     followAccountMutation.mutate(id, {
@@ -40,7 +51,7 @@ function Home() {
       {videoList?.map((video) => (
         <div key={video.id} className={cx('wrapper')}>
           <div className={cx('list-item-container')}>
-            <Link to={`/@${video.user.nickname}`}>
+            <Link to={`/@${video.user.nickname}`} onMouseEnter={() => handlePrefetchingUser(`@${video.user.nickname}`)}>
               <Image
                 className={cx('avatar')}
                 src={
