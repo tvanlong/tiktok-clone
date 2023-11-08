@@ -1,3 +1,4 @@
+import { useContext } from 'react'
 import Image from '~/components/Image'
 import Button from '~/components/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -5,6 +6,7 @@ import { LinkIcon, PlayIcon } from '~/constants/icons'
 import { useQuery } from '@tanstack/react-query'
 import { getProfile } from '~/apis/auth.api'
 import { getProfile as getProfileFromLS } from '~/utils/auth'
+import { AppContext } from '~/contexts/app.context'
 import classNames from 'classnames/bind'
 import styles from './Profile.module.scss'
 import path from '~/constants/path'
@@ -12,6 +14,7 @@ import path from '~/constants/path'
 const cx = classNames.bind(styles)
 
 function Profile() {
+  const { isAuthenticated, setShowModal } = useContext(AppContext)
   const { nickname } = useParams()
   const navigate = useNavigate()
   const { data: userData } = useQuery({
@@ -34,28 +37,42 @@ function Profile() {
     user && navigate(path.editProfile)
   }
 
+  if (!user) return null
   return (
     <div>
       <div className={cx('container')}>
         <div className={cx('bottom-line')}>
           <div className={cx('info-wrapper')}>
             <div className={cx('user-info')}>
-              <Image className={cx('avatar')} src={user?.avatar} alt={user?.nickname} />
+              <Image className={cx('avatar')} src={user.avatar} alt={user.nickname} />
               <div className={cx('user-title')}>
-                <h3 className={cx('name')}>{user?.nickname}</h3>
+                <h3 className={cx('name')}>{user.nickname}</h3>
                 <div className={cx('nickname')}>
-                  {user?.first_name} {user?.last_name}
+                  {user.first_name} {user.last_name}
                 </div>
-                {user && user.nickname === getProfileFromLS().nickname ? (
-                  <Button className={cx('btn-edit')} onClick={navigateToEditProfile}>
-                    Edit Profile
-                  </Button>
-                ) : user?.is_followed ? (
-                  <Button className={cx('btn-follow')} primary>
-                    Unfollow
-                  </Button>
+                {isAuthenticated ? (
+                  user &&
+                  (user.nickname === getProfileFromLS().nickname ? (
+                    <Button className={cx('btn-edit')} onClick={navigateToEditProfile}>
+                      Edit Profile
+                    </Button>
+                  ) : user.is_followed ? (
+                    <Button className={cx('btn-follow')} primary>
+                      Unfollow
+                    </Button>
+                  ) : (
+                    <Button className={cx('btn-follow')} primary>
+                      Follow
+                    </Button>
+                  ))
                 ) : (
-                  <Button className={cx('btn-follow')} primary>
+                  <Button
+                    className={cx('btn-follow')}
+                    primary
+                    onClick={() => {
+                      setShowModal(true)
+                    }}
+                  >
                     Follow
                   </Button>
                 )}
@@ -63,22 +80,21 @@ function Profile() {
             </div>
             <div className={cx('user-subinfo')}>
               <div className={cx('count-info')}>
-                <strong>{user?.followings_count}</strong>
+                <strong>{user.followings_count}</strong>
                 <span>Following</span>
               </div>
               <div className={cx('count-info')}>
-                <strong>{user?.followers_count}</strong>
+                <strong>{user.followers_count}</strong>
                 <span>Followers</span>
               </div>
               <div className={cx('count-info')}>
-                <strong>{user?.likes_count}</strong>
+                <strong>{user.likes_count}</strong>
                 <span>Likes</span>
               </div>
             </div>
-            <div className={cx('desc')}>{user?.bio}</div>
+            <div className={cx('desc')}>{user.bio}</div>
             <Link className={cx('url')} to=''>
-              <LinkIcon />{' '}
-              {user?.facebook_url || user?.instagram_url || user?.youtube_url || user?.twitter_url || 'No URL'}
+              <LinkIcon /> {user.facebook_url || user.instagram_url || user.youtube_url || user.twitter_url || 'No URL'}
             </Link>
           </div>
         </div>

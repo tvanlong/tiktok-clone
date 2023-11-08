@@ -9,5 +9,5 @@ export const getCurrentUser = () => http.get('auth/me')
 export const followUser = (id) => http.post(`users/${id}/follow`)
 export const unfollowUser = (id) => http.post(`users/${id}/unfollow`)
 
-export const getProfile = (params) => http.get(`users/${params}`)
+export const getProfile = (param) => http.get(`users/${param}`)
 export const updateProfile = (data) => http.patch('auth/me', data)
