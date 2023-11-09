@@ -47,7 +47,7 @@ export const userSchema = yup.object({
     .required('Last name is required'),
   nickname: yup
     .string()
-    .min(3, 'Name must be at least 3 characters')
+    .min(6, 'Name must be at least 6 characters')
     .max(160, 'Name must not exceed 160 characters')
     .required('Name is required'),
   bio: yup.string().max(80, 'Bio must not exceed 80 characters').required('Bio is required')

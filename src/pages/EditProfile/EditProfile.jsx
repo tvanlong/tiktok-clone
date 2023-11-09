@@ -6,7 +6,7 @@ import Button from '~/components/Button'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { userSchema } from '~/utils/rules'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { getCurrentUser, updateProfile } from '~/apis/auth.api'
 import { getProfile as getProfileFromLS } from '~/utils/auth'
 import { AppContext } from '~/contexts/app.context'
@@ -17,6 +17,7 @@ const cx = classNames.bind(styles)
 
 function EditProfile() {
   const { setProfile } = useContext(AppContext)
+  const [count, setCount] = useState(0)
   const { data: userData, refetch } = useQuery({
     queryKey: ['user'],
     queryFn: () => getCurrentUser(getProfileFromLS().nickname)
@@ -46,6 +47,7 @@ function EditProfile() {
       setValue('last_name', user.last_name)
       setValue('nickname', user.nickname)
       setValue('bio', user.bio)
+      setCount(user.bio.length)
     }
   }, [setValue, user])
 
@@ -56,19 +58,32 @@ function EditProfile() {
       form.append(key, data[key])
     })
     const res = await updateProfileMutation.mutateAsync(form)
+    console.log(res)
     setProfile(res.data.data)
     localStorage.setItem('profile', JSON.stringify(res.data.data))
     refetch()
     toast.success('Your profile is updated', {
-      autoClose: 2000,
+      autoClose: 1000,
       theme: 'colored'
     })
   })
 
+  const handleLimitTextarea = (e) => {
+    const value = e.target.value
+    setCount(value.length)
+    if (value.length > 80) {
+      toast.error('Bio must be less than 80 characters', {
+        autoClose: 1000,
+        position: 'top-center',
+        theme: 'colored'
+      })
+    }
+  }
+
   return (
     <div className={cx('wrapper')}>
-      <div className={cx('content')}>
-        <form className={cx('edit-container')} onSubmit={onSubmit}>
+      <form className={cx('content')} onSubmit={onSubmit}>
+        <div className={cx('edit-container')}>
           <div className={cx('header-container')}>
             <h1 className={cx('header-title')}>Edit Profile</h1>
           </div>
@@ -114,17 +129,22 @@ function EditProfile() {
             <div className={cx('item-container')}>
               <div className={cx('label')}>Bio</div>
               <div className={cx('edit-area')}>
-                <textarea defaultValue={user?.bio} placeholder='Bio' {...register('bio')}></textarea>
+                <textarea
+                  defaultValue={user?.bio}
+                  placeholder='Bio'
+                  {...register('bio')}
+                  onChange={handleLimitTextarea}
+                ></textarea>
                 <div className={cx('err')}>{errors.bio?.message}</div>
-                <p>0/80</p>
+                <p>{count}/80</p>
               </div>
             </div>
           </div>
           <div className={cx('footer-container')}>
             <Button className={cx('btn-save')}>Save</Button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   )
 }

@@ -3,9 +3,10 @@ import Image from '~/components/Image'
 import Button from '~/components/Button'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { LinkIcon, PlayIcon } from '~/constants/icons'
-import { useQuery } from '@tanstack/react-query'
-import { getProfile } from '~/apis/auth.api'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { followUser, getProfile, unfollowUser } from '~/apis/auth.api'
 import { getProfile as getProfileFromLS } from '~/utils/auth'
+import { toast } from 'react-toastify'
 import { AppContext } from '~/contexts/app.context'
 import classNames from 'classnames/bind'
 import styles from './Profile.module.scss'
@@ -15,6 +16,7 @@ const cx = classNames.bind(styles)
 
 function Profile() {
   const { isAuthenticated, setShowModal } = useContext(AppContext)
+  const queryClient = useQueryClient()
   const [user, setUser] = useState()
   const { nickname } = useParams()
   const navigate = useNavigate()
@@ -31,6 +33,52 @@ function Profile() {
       setUser(userData.data.data)
     }
   }, [userData])
+
+  const refetchProfile = () => {
+    // refetch data mỗi khi follow user
+    queryClient.invalidateQueries({
+      queryKey: ['followingUsers'],
+      exact: true
+    })
+    queryClient.invalidateQueries({
+      queryKey: ['suggestedUsers'],
+      exact: true
+    })
+    queryClient.prefetchQuery({
+      queryKey: ['user', nickname],
+      queryFn: () => getProfile(nickname)
+    })
+  }
+
+  const followMutation = useMutation({
+    mutationFn: (id) => followUser(id)
+  })
+
+  const handleFollow = (id) => {
+    followMutation.mutate(id, {
+      onSuccess: () => {
+        toast.success('Followed', {
+          autoClose: 1000
+        })
+        refetchProfile()
+      }
+    })
+  }
+
+  const unFollowMutation = useMutation({
+    mutationFn: (id) => unfollowUser(id)
+  })
+
+  const handleUnFollow = (id) => {
+    unFollowMutation.mutate(id, {
+      onSuccess: () => {
+        toast.success('Unfollowed', {
+          autoClose: 1000
+        })
+        refetchProfile()
+      }
+    })
+  }
 
   const navigateToEditProfile = () => {
     user && navigate(path.editProfile)
@@ -56,11 +104,11 @@ function Profile() {
                       Edit Profile
                     </Button>
                   ) : user.is_followed ? (
-                    <Button className={cx('btn-follow')} primary>
+                    <Button className={cx('btn-follow')} primary onClick={() => handleUnFollow(user.id)}>
                       Unfollow
                     </Button>
                   ) : (
-                    <Button className={cx('btn-follow')} primary>
+                    <Button className={cx('btn-follow')} primary onClick={() => handleFollow(user.id)}>
                       Follow
                     </Button>
                   ))
