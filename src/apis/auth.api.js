@@ -10,4 +10,9 @@ export const followUser = (id) => http.post(`users/${id}/follow`)
 export const unfollowUser = (id) => http.post(`users/${id}/unfollow`)
 
 export const getProfile = (param) => http.get(`users/${param}`)
-export const updateProfile = (data) => http.patch('auth/me', data)
+export const updateProfile = (data) =>
+  http.post('auth/me?_method=PATCH', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })

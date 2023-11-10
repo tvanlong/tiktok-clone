@@ -18,6 +18,8 @@ const cx = classNames.bind(styles)
 function EditProfile() {
   const { setProfile } = useContext(AppContext)
   const [count, setCount] = useState(0)
+  const [file, setFile] = useState()
+  const [avatarUrl, setAvatarUrl] = useState('')
   const { data: userData, refetch } = useQuery({
     queryKey: ['user'],
     queryFn: () => getCurrentUser(getProfileFromLS().nickname)
@@ -33,6 +35,7 @@ function EditProfile() {
     setValue
   } = useForm({
     defaultValues: {
+      avatar: '',
       first_name: '',
       last_name: '',
       nickname: '',
@@ -43,6 +46,7 @@ function EditProfile() {
 
   useEffect(() => {
     if (user) {
+      setValue('avatar', user.avatar)
       setValue('first_name', user.first_name)
       setValue('last_name', user.last_name)
       setValue('nickname', user.nickname)
@@ -53,12 +57,16 @@ function EditProfile() {
 
   const onSubmit = handleSubmit(async (data) => {
     const form = new FormData()
-    const addToFormData = ['first_name', 'last_name', 'nickname', 'bio']
-    addToFormData.forEach((key) => {
-      form.append(key, data[key])
-    })
+    // const addToFormData = ['avatar', 'first_name', 'last_name', 'nickname', 'bio']
+    // addToFormData.forEach((key) => {
+    //   form.append(key, data[key])
+    // })
+    form.append('avatar', file)
+    form.append('first_name', data.first_name)
+    form.append('last_name', data.last_name)
+    form.append('nickname', data.nickname)
+    form.append('bio', data.bio)
     const res = await updateProfileMutation.mutateAsync(form)
-    console.log(res)
     setProfile(res.data.data)
     localStorage.setItem('profile', JSON.stringify(res.data.data))
     refetch()
@@ -80,6 +88,19 @@ function EditProfile() {
     }
   }
 
+  const handleChangeFile = (e) => {
+    const file = e.target.files[0]
+    setFile(file)
+
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setAvatarUrl(reader.result)
+    }
+    if (file) {
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
     <div className={cx('wrapper')}>
       <form className={cx('content')} onSubmit={onSubmit}>
@@ -92,14 +113,16 @@ function EditProfile() {
               <div className={cx('label')}>Profile photo</div>
               <div className={cx('avatar-content')}>
                 <div className={cx('avatar')}>
-                  <Image src={user?.avatar} alt={user?.nickname} />
+                  <Image src={avatarUrl || user?.avatar} alt={user?.nickname} />
                 </div>
                 <div className={cx('avatar-edit')}>
                   <EditAvatar />
                   <input
                     type='file'
-                    accept='.jpg,.jpeg,.png,.tiff,.heic,.webp'
+                    accept='image/*'
+                    {...register('avatar')}
                     className={cx('avatar-edit-input')}
+                    onChange={handleChangeFile}
                   ></input>
                 </div>
               </div>

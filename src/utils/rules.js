@@ -35,6 +35,7 @@ export const schemaLogin = yup.object({
 })
 
 export const userSchema = yup.object({
+  avatar: yup.string().required('Avatar is required'),
   first_name: yup
     .string()
     .min(3, 'First name must be at least 3 characters')
