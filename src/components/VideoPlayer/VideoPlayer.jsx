@@ -13,7 +13,6 @@ function VideoPlayer({ video }) {
   const [currentTime, setCurrentTime] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
-
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -85,57 +84,36 @@ function VideoPlayer({ video }) {
       <input
         type='range'
         className={cx('progress-bar')}
-        defaultValue={progress}
+        value={progress}
         step='1'
         min='0'
         max='100'
         ref={progressBarRef}
+        onChange={() => {
+          // Do nothing
+        }}
       ></input>
       <span className={cx('time-update')}>
         {formattedCurrentTime}/{formattedDuration}
       </span>
-      {isPlaying ? (
-        <button
-          className={cx('btn-control')}
-          onClick={() => {
-            setIsPlaying(false)
-            videoRef.current.pause()
-          }}
-        >
-          <PauseBtn />
-        </button>
-      ) : (
-        <button
-          className={cx('btn-control')}
-          onClick={() => {
-            setIsPlaying(true)
-            videoRef.current.play()
-          }}
-        >
-          <PlayBtn />
-        </button>
-      )}
-      {isMuted ? (
-        <button
-          className={cx('btn-sound')}
-          onClick={() => {
-            setIsMuted(false)
-            videoRef.current.muted = false
-          }}
-        >
-          <Unmuted />
-        </button>
-      ) : (
-        <button
-          className={cx('btn-sound')}
-          onClick={() => {
-            setIsMuted(true)
-            videoRef.current.muted = true
-          }}
-        >
-          <Muted />
-        </button>
-      )}
+      <button
+        className={cx('btn-control')}
+        onClick={() => {
+          setIsPlaying((prevIsPlaying) => !prevIsPlaying)
+          videoRef.current[isPlaying ? 'pause' : 'play']()
+        }}
+      >
+        {isPlaying ? <PauseBtn /> : <PlayBtn />}
+      </button>
+      <button
+        className={cx('btn-sound')}
+        onClick={() => {
+          setIsMuted((prevIsMuted) => !prevIsMuted)
+          videoRef.current.muted = !isMuted
+        }}
+      >
+        {isMuted ? <Unmuted /> : <Muted />}
+      </button>
     </div>
   )
 }
