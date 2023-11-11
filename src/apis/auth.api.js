@@ -16,3 +16,7 @@ export const updateProfile = (data) =>
       'Content-Type': 'multipart/form-data'
     }
   })
+
+// React to Video
+export const likeVideo = (id) => http.post(`videos/${id}/like`)
+export const unlikeVideo = (id) => http.post(`videos/${id}/unlike`)

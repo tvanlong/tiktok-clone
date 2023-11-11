@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import { faHeart, faCommentDots, faBookmark, faShare } from '@fortawesome/free-solid-svg-icons'
+import { getVideoList } from '~/apis/video.api'
 import Image from '~/components/Image'
 import Button from '~/components/Button'
-import { getVideoList } from '~/apis/video.api'
 import VideoPlayer from '~/components/VideoPlayer'
 import ReactButton from '~/components/ReactButton'
 import { followUser } from '~/apis/auth.api'
@@ -19,7 +19,7 @@ function Home() {
   const queryClient = useQueryClient()
   const { data, refetch } = useQuery({
     queryKey: ['videoList'],
-    queryFn: () => getVideoList('for-you', 15)
+    queryFn: () => getVideoList('for-you', 1)
   })
   const videoList = data?.data?.data
 
@@ -41,6 +41,14 @@ function Home() {
         refetch()
         toast.success('Followed', {
           timeClose: 1000
+        })
+        queryClient.invalidateQueries({
+          queryKey: ['followingUsers'],
+          exact: true
+        })
+        queryClient.invalidateQueries({
+          queryKey: ['suggestedUsers'],
+          exact: true
         })
       }
     })
@@ -80,7 +88,7 @@ function Home() {
               <div className={cx('video')}>
                 <VideoPlayer video={video} />
                 <div className={cx('btn-react-wrapper')}>
-                  <ReactButton icon={faHeart} count={video.likes_count} />
+                  <ReactButton icon={faHeart} count={video.likes_count} react={true} video={video} />
                   <ReactButton icon={faCommentDots} count={video.comments_count} />
                   <ReactButton icon={faBookmark} count={video.views_count} />
                   <ReactButton icon={faShare} count={video.shares_count} />

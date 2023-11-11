@@ -16,6 +16,10 @@
 .react-icon {
   width: 24px;
   height: 24px;
+
+  &.is-liked {
+    color: #fe2c55;
+  }
 }
 
 .amount {
