@@ -1,12 +1,12 @@
 import { useRef, useEffect, useState } from 'react'
 import formatDuration from 'format-duration'
+import { PlayBtn, PauseBtn, Muted, Unmuted } from '~/constants/icons'
 import classNames from 'classnames/bind'
 import styles from './VideoPlayer.module.scss'
-import { PlayBtn, PauseBtn, Muted, Unmuted } from '~/constants/icons'
 
 const cx = classNames.bind(styles)
 
-function VideoPlayer({ video }) {
+function VideoPlayer({ video, toogle }) {
   const videoRef = useRef()
   const progressBarRef = useRef()
   const [progress, setProgress] = useState(0)
@@ -77,7 +77,7 @@ function VideoPlayer({ video }) {
     : '00:00'
 
   return (
-    <div className={cx('video-wrapper')}>
+    <div className={cx('video-wrapper')} onClick={toogle}>
       <video ref={videoRef} poster={video.thumb_url} muted playsInline autoPlay loop>
         <source src={video.file_url} type='video/mp4' />
       </video>

@@ -1,0 +1,82 @@
+.modal-wrapper {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100vw;
+  height: 100vh;
+}
+
+.modal-left {
+  flex: 1 0 600px;
+  background: rgb(0, 0, 0);
+  position: relative;
+  overflow: hidden;
+
+  button {
+    background: #ccc;
+    cursor: pointer;
+    color: #fff;
+    font-size: 2rem;
+    padding: 6px;
+    background: rgba(84, 84, 84, 0.5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.btn-close {
+  position: absolute;
+  z-index: 1;
+  top: 15px;
+  left: 15px;
+}
+
+.group-btn {
+  position: absolute;
+  bottom: 15px;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 1;
+
+  .btn-control {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .btn-prev {
+    rotate: -90deg;
+  }
+
+  .btn-next {
+    rotate: 90deg;
+  }
+}
+
+.modal-right {
+  flex: 0 0 544px;
+  width: 544px;
+  background-color: #fff;
+}
+
+.video {
+  position: relative;
+  width: 40%;
+  height: 100%;
+  margin: 0 auto;
+
+  video {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+}
