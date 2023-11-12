@@ -1,12 +1,16 @@
 import { useRef, useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import formatDuration from 'format-duration'
 import { PlayBtn, PauseBtn, Muted, Unmuted } from '~/constants/icons'
 import classNames from 'classnames/bind'
 import styles from './VideoPlayer.module.scss'
+import Modal from '~/components/Modal'
+import useModal from '~/hooks/useModal'
 
 const cx = classNames.bind(styles)
 
-function VideoPlayer({ video, toogle }) {
+function VideoPlayer({ video }) {
+  const { isShowing, toggle } = useModal()
   const videoRef = useRef()
   const progressBarRef = useRef()
   const [progress, setProgress] = useState(0)
@@ -77,45 +81,61 @@ function VideoPlayer({ video, toogle }) {
     : '00:00'
 
   return (
-    <div className={cx('video-wrapper')} onClick={toogle}>
-      <video ref={videoRef} poster={video.thumb_url} muted playsInline autoPlay loop>
-        <source src={video.file_url} type='video/mp4' />
-      </video>
-      <input
-        type='range'
-        className={cx('progress-bar')}
-        value={progress}
-        step='1'
-        min='0'
-        max='100'
-        ref={progressBarRef}
-        onChange={() => {
-          // Do nothing
-        }}
-      ></input>
-      <span className={cx('time-update')}>
-        {formattedCurrentTime}/{formattedDuration}
-      </span>
-      <button
-        className={cx('btn-control')}
-        onClick={() => {
-          setIsPlaying((prevIsPlaying) => !prevIsPlaying)
-          videoRef.current[isPlaying ? 'pause' : 'play']()
-        }}
-      >
-        {isPlaying ? <PauseBtn /> : <PlayBtn />}
-      </button>
-      <button
-        className={cx('btn-sound')}
-        onClick={() => {
-          setIsMuted((prevIsMuted) => !prevIsMuted)
-          videoRef.current.muted = !isMuted
-        }}
-      >
-        {isMuted ? <Unmuted /> : <Muted />}
-      </button>
-    </div>
+    <>
+      <div className={cx('video-wrapper')}>
+        <div
+          className={cx('overlay')}
+          onClick={() => {
+            toggle()
+            setIsPlaying(false)
+            videoRef.current.pause()
+            videoRef.current.currentTime = 0
+          }}
+        ></div>
+        <video ref={videoRef} poster={video.thumb_url} muted playsInline autoPlay loop>
+          <source src={video.file_url} type='video/mp4' />
+        </video>
+        <input
+          type='range'
+          className={cx('progress-bar')}
+          value={progress}
+          step='1'
+          min='0'
+          max='100'
+          ref={progressBarRef}
+          onChange={() => {
+            // Do nothing
+          }}
+        ></input>
+        <span className={cx('time-update')}>
+          {formattedCurrentTime}/{formattedDuration}
+        </span>
+        <button
+          className={cx('btn-control')}
+          onClick={() => {
+            setIsPlaying((prevIsPlaying) => !prevIsPlaying)
+            videoRef.current[isPlaying ? 'pause' : 'play']()
+          }}
+        >
+          {isPlaying ? <PauseBtn /> : <PlayBtn />}
+        </button>
+        <button
+          className={cx('btn-sound')}
+          onClick={() => {
+            setIsMuted((prevIsMuted) => !prevIsMuted)
+            videoRef.current.muted = !isMuted
+          }}
+        >
+          {isMuted ? <Unmuted /> : <Muted />}
+        </button>
+      </div>
+      <Modal isShowing={isShowing} hide={toggle} video={video} />
+    </>
   )
 }
 
 export default VideoPlayer
+
+VideoPlayer.propTypes = {
+  video: PropTypes.object
+}

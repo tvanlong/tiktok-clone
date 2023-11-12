@@ -12,13 +12,10 @@ import { useQueryClient } from '@tanstack/react-query'
 import { getProfile } from '~/apis/auth.api'
 import classNames from 'classnames/bind'
 import styles from './Home.module.scss'
-import useModal from '~/hooks/useModal'
-import Modal from '~/components/Modal'
 
 const cx = classNames.bind(styles)
 
 function Home() {
-  const { isShowing, toggle } = useModal()
   const queryClient = useQueryClient()
   const { data, refetch } = useQuery({
     queryKey: ['videoList'],
@@ -93,7 +90,7 @@ function Home() {
                   )}
                 </div>
                 <div className={cx('video')}>
-                  <VideoPlayer video={video} toogle={toggle} />
+                  <VideoPlayer video={video} />
                   <div className={cx('btn-react-wrapper')}>
                     <ReactButton icon={faHeart} count={video.likes_count} react={true} video={video} />
                     <ReactButton icon={faCommentDots} count={video.comments_count} />
@@ -106,7 +103,6 @@ function Home() {
           </div>
         ))}
       </div>
-      <Modal isShowing={isShowing} hide={toggle} />
     </>
   )
 }

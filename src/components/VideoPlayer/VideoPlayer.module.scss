@@ -22,6 +22,16 @@
   }
 }
 
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80%;
+  background-color: transparent;
+  z-index: 10;
+}
+
 .progress-bar {
   opacity: 0;
   appearance: none;
@@ -70,6 +80,7 @@
   position: absolute;
   bottom: 35px;
   left: 20px;
+  z-index: 99;
 }
 
 .btn-sound {
@@ -78,4 +89,5 @@
   position: absolute;
   bottom: 35px;
   right: 20px;
+  z-index: 99;
 }
