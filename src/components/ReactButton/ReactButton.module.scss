@@ -8,14 +8,14 @@
 .custom-button {
   display: inline-flex;
   font-size: 2.4rem;
-  padding: 16px 16px;
+  padding: 12px 12px;
   border-radius: 50%;
   cursor: pointer;
 }
 
-.react-icon {
-  width: 24px;
-  height: 24px;
+.custom-button .react-icon {
+  width: 20px;
+  height: 20px;
 
   &.is-liked {
     color: #fe2c55;
@@ -25,4 +25,21 @@
 .amount {
   font-size: 1.4rem;
   opacity: 0.8;
+}
+
+.btn-react {
+  display: inline-flex;
+  font-size: 2.4rem;
+  padding: 10px 10px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.btn-react .react-icon {
+  width: 15px;
+  height: 15px;
+
+  &.is-liked {
+    color: #fe2c55;
+  }
 }

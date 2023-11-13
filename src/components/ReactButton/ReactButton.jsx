@@ -7,7 +7,7 @@ import { likeVideo, unlikeVideo } from '~/apis/auth.api'
 
 const cx = classNames.bind(styles)
 
-function ReactButton({ icon, count, react, video }) {
+function ReactButton({ icon, count, react, video, className }) {
   const queryClient = useQueryClient()
   const likeVideoMutation = useMutation({
     mutationFn: (id) => likeVideo(id),
@@ -41,7 +41,7 @@ function ReactButton({ icon, count, react, video }) {
     <div className={cx('btn-wrapper')}>
       {react ? (
         <button
-          className={cx('custom-button')}
+          className={cx(className)}
           onClick={() => {
             if (video.is_liked) {
               handleunlikeVideo(video.id)
@@ -58,11 +58,11 @@ function ReactButton({ icon, count, react, video }) {
           />
         </button>
       ) : (
-        <button className={cx('custom-button')}>
+        <button className={cx(className)}>
           <FontAwesomeIcon className={cx('react-icon')} icon={icon} />
         </button>
       )}
-      <div className={cx('amount')}>{count}</div>
+      {count && <div className={cx('amount')}>{count}</div>}
     </div>
   )
 }
@@ -71,7 +71,7 @@ export default ReactButton
 
 ReactButton.propTypes = {
   icon: PropTypes.object.isRequired,
-  count: PropTypes.number.isRequired,
+  count: PropTypes.number,
   react: PropTypes.bool,
   video: PropTypes.object
 }

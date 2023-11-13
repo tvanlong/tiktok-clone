@@ -92,10 +92,16 @@ function Home() {
                 <div className={cx('video')}>
                   <VideoPlayer video={video} />
                   <div className={cx('btn-react-wrapper')}>
-                    <ReactButton icon={faHeart} count={video.likes_count} react={true} video={video} />
-                    <ReactButton icon={faCommentDots} count={video.comments_count} />
-                    <ReactButton icon={faBookmark} count={video.views_count} />
-                    <ReactButton icon={faShare} count={video.shares_count} />
+                    <ReactButton
+                      className={'custom-button'}
+                      icon={faHeart}
+                      count={video.likes_count}
+                      react={true}
+                      video={video}
+                    />
+                    <ReactButton className={'custom-button'} icon={faCommentDots} count={video.comments_count} />
+                    <ReactButton className={'custom-button'} icon={faBookmark} count={video.views_count} />
+                    <ReactButton className={'custom-button'} icon={faShare} count={video.shares_count} />
                   </div>
                 </div>
               </div>

@@ -125,4 +125,120 @@
   flex: 0 0 544px;
   width: 544px;
   background-color: #fff;
+  overflow-y: scroll;
 }
+
+.comment-container {
+  padding: 20px 20px 24px;
+}
+
+.profile-wrapper {
+  background: rgba(22, 24, 35, 0.03);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.info {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.avatar {
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+  }
+}
+
+.name {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .username {
+    font-weight: 700;
+    font-size: 1.8rem;
+    line-height: 24px;
+  }
+
+  .nickname, 
+  .comment {
+    font-size: 1.4rem;
+    line-height: 18px;
+  }
+}
+
+.btn-follow {
+  height: 36px;
+}
+
+.content {
+  font-size: 1.6rem;
+  line-height: 24px;
+}
+
+.react-wrapper {
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.btn-group {
+  display: flex;
+  gap: 20px;
+}
+
+.btn-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  span {
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+}
+
+.tab-menu-wrapper {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-top: 1px solid #e5e5e5;
+}
+
+.copy-link {
+  display: flex;
+  color: rgba(22, 24, 35, 0.75);
+  font-size: 1.4rem;
+  line-height: 18px;
+  border: 1px solid rgba(22, 24, 35, 0.12);
+  border-radius: 8px;
+  margin-top: 16px;
+
+  p {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    flex: 1 1 auto;
+    padding: 7px 0px 5px 12px;
+    background-color: rgba(22, 24, 35, 0.06);
+  }
+
+  button {
+    background: none rgba(22, 24, 35, 0.06);
+    color: rgb(22, 24, 35);
+    font-size: 1.5rem;
+    font-weight: 700;
+    flex: 0 0 auto;
+    cursor: pointer;
+    padding: 7px 18px;
+
+    &:hover {
+      background-color: rgba(22, 24, 35, 0.12);
+    }
+  }
+}
+
+
