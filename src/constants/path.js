@@ -6,7 +6,8 @@ const path = {
   nickname: '/:nickname',
   editProfile: '/edit-profile',
   search: '/search',
-  upload: '/upload'
+  upload: '/upload',
+  video: '/:nickname/video/:uuid'
 }
 
 export default path

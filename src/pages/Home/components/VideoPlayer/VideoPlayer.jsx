@@ -4,13 +4,10 @@ import formatDuration from 'format-duration'
 import { PlayBtn, PauseBtn, Muted, Unmuted } from '~/constants/icons'
 import classNames from 'classnames/bind'
 import styles from './VideoPlayer.module.scss'
-import Modal from '~/components/Modal'
-import useModal from '~/hooks/useModal'
 
 const cx = classNames.bind(styles)
 
-function VideoPlayer({ video }) {
-  const { isShowing, toggle } = useModal()
+function VideoPlayer({ video, navigateToVideo }) {
   const videoRef = useRef()
   const progressBarRef = useRef()
   const [progress, setProgress] = useState(0)
@@ -88,10 +85,7 @@ function VideoPlayer({ video }) {
         <div
           className={cx('overlay')}
           onClick={() => {
-            toggle()
-            setIsPlaying(false)
-            videoRef.current.pause()
-            videoRef.current.currentTime = 0
+            navigateToVideo(video.user.nickname, video.uuid, video)
           }}
         ></div>
         <video ref={videoRef} poster={video.thumb_url} muted playsInline autoPlay loop>
@@ -131,7 +125,6 @@ function VideoPlayer({ video }) {
           {isMuted ? <Unmuted /> : <Muted />}
         </button>
       </div>
-      <Modal isShowing={isShowing} hide={toggle} video={video} />
     </>
   )
 }
@@ -139,5 +132,6 @@ function VideoPlayer({ video }) {
 export default VideoPlayer
 
 VideoPlayer.propTypes = {
-  video: PropTypes.object
+  video: PropTypes.object.isRequired,
+  navigateToVideo: PropTypes.func.isRequired
 }

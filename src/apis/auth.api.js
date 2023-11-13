@@ -20,3 +20,6 @@ export const updateProfile = (data) =>
 // React to Video
 export const likeVideo = (id) => http.post(`videos/${id}/like`)
 export const unlikeVideo = (id) => http.post(`videos/${id}/unlike`)
+
+// Comment
+export const getComments = (id) => http.get(`videos/${id}/comments`)

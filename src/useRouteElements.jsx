@@ -13,6 +13,7 @@ import DefaultLayout from '~/layouts/DefaultLayout'
 import OnlyHeaderLayout from '~/layouts/OnlyHeaderLayout'
 import EditProfile from './pages/EditProfile'
 import path from '~/constants/path'
+import Video from '~/pages/Video'
 
 function ProtectedRoute() {
   // Nếu đã login (isAuthenticated là true) thì mới cho phép đi tiếp
@@ -101,6 +102,10 @@ function useRouteElements() {
           <Search />
         </DefaultLayout>
       )
+    },
+    {
+      path: path.video,
+      element: <Video />
     }
   ])
 

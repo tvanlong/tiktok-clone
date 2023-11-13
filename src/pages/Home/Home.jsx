@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { faHeart, faCommentDots, faBookmark, faShare } from '@fortawesome/free-solid-svg-icons'
 import { getVideoList } from '~/apis/video.api'
 import Image from '~/components/Image'
 import Button from '~/components/Button'
-import VideoPlayer from '~/components/VideoPlayer'
+import VideoPlayer from '~/pages/Home/components/VideoPlayer'
 import ReactButton from '~/components/ReactButton'
 import { followUser } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
@@ -17,6 +17,7 @@ const cx = classNames.bind(styles)
 
 function Home() {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
   const { data, refetch } = useQuery({
     queryKey: ['videoList'],
     queryFn: () => getVideoList('for-you', 1)
@@ -50,6 +51,14 @@ function Home() {
           queryKey: ['suggestedUsers'],
           exact: true
         })
+      }
+    })
+  }
+
+  const navigateToVideo = (nickname, uuid, video) => {
+    navigate(`/@${nickname}/video/${uuid}`, {
+      state: {
+        video
       }
     })
   }
@@ -90,7 +99,7 @@ function Home() {
                   )}
                 </div>
                 <div className={cx('video')}>
-                  <VideoPlayer video={video} />
+                  <VideoPlayer video={video} navigateToVideo={navigateToVideo} />
                   <div className={cx('btn-react-wrapper')}>
                     <ReactButton
                       className={'custom-button'}
