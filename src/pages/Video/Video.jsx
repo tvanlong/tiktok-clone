@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import formatDuration from 'format-duration'
 import { CloseIcon, MoreIcon, Muted, NextIcon, PauseBtn, PlayBtn, PrevIcon, Unmuted } from '~/constants/icons'
-import { faHeart, faCommentDots, faBookmark, faShare } from '@fortawesome/free-solid-svg-icons'
+import { faHeart, faCommentDots, faBookmark, faShare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Image from '~/components/Image/Image'
 import Button from '~/components/Button'
@@ -11,12 +11,19 @@ import ReactButton from '~/components/ReactButton'
 import { toast } from 'react-toastify'
 import classNames from 'classnames/bind'
 import styles from './Video.module.scss'
-import { useQuery } from '@tanstack/react-query'
-import { getComments } from '~/apis/auth.api'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { deleteComment, getComments, postComment } from '~/apis/auth.api'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { commentSchema } from '~/utils/rules'
+import Tippy from '@tippyjs/react/headless'
+import Wrapper from '~/components/Wrapper'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const cx = classNames.bind(styles)
 
 function Video() {
+  const queryClient = useQueryClient()
   const { state } = useLocation()
   const video = state.video
   const navigate = useNavigate()
@@ -25,7 +32,18 @@ function Video() {
   const [progress, setProgress] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
   const [isPlaying, setIsPlaying] = useState(true)
-  const [isMuted, setIsMuted] = useState(false)
+  const [isMuted, setIsMuted] = useState(true)
+  const { register, handleSubmit } = useForm({
+    resolver: yupResolver(commentSchema)
+  })
+
+  const postCommentMutation = useMutation({
+    mutationFn: (data) => postComment(video.uuid, data)
+  })
+
+  const deleteCommentMutation = useMutation({
+    mutationFn: (commentId) => deleteComment(commentId)
+  })
 
   const { data: commentsData } = useQuery({
     queryKey: ['video', video.id],
@@ -69,6 +87,36 @@ function Video() {
         leading: true
       })
     : '00:00'
+
+  const onSubmit = handleSubmit((data) => {
+    postCommentMutation.mutate(data, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['video', video.id])
+      },
+      onError: (err) => {
+        if (err.response.status === 401) {
+          toast.error('Please login to comment', {
+            autoClose: 1000,
+            position: 'top-center'
+          })
+        } else if (err.response.status === 422) {
+          toast.error('Comment is required', {
+            autoClose: 1000,
+            position: 'top-center'
+          })
+        }
+      }
+    })
+  })
+
+  const handleDeleteComment = (commentId) => {
+    deleteCommentMutation.mutate(commentId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['video', video.id])
+      }
+    })
+  }
+
   return ReactDOM.createPortal(
     // gắn component Modal vào document.body element
     <React.Fragment>
@@ -198,25 +246,62 @@ function Video() {
             <div className={cx('tab-menu-wrapper')}></div>
             <div className={cx('comment-item-wrapper')}>
               {comments?.map((comment) => (
-                <div className={cx('info')} key={comment.id}>
-                  <Link to={`/@${comment.user.nickname}`} className={cx('avatar')}>
-                    <Image
-                      src={
-                        comment.user.avatar !== 'https://files.fullstack.edu.vn/f8-tiktok/'
-                          ? comment.user.avatar
-                          : 'https://i.pinimg.com/736x/9a/63/e1/9a63e148aaff53532b045f6d1f09d762.jpg'
-                      }
-                      alt={comment.user.nickname}
-                    />
-                  </Link>
-                  <Link to={`/@${comment.user.nickname}`} className={cx('name')}>
-                    <span className={cx('username')}>{comment.user.nickname}</span>
-                    <span className={cx('comment')}>{comment.comment}</span>
-                    <span className={cx('nickname')}>2d ago</span>
-                  </Link>
+                <div className={cx('comment-item')} key={comment.id}>
+                  <div className={cx('info')}>
+                    <Link to={`/@${comment.user.nickname}`} className={cx('avatar')}>
+                      <Image
+                        src={
+                          comment.user.avatar !== 'https://files.fullstack.edu.vn/f8-tiktok/'
+                            ? comment.user.avatar
+                            : 'https://i.pinimg.com/736x/9a/63/e1/9a63e148aaff53532b045f6d1f09d762.jpg'
+                        }
+                        alt={comment.user.nickname}
+                      />
+                    </Link>
+                    <Link to={`/@${comment.user.nickname}`} className={cx('name')}>
+                      <span className={cx('username')}>{comment.user.nickname}</span>
+                      <span className={cx('comment')}>{comment.comment}</span>
+                      <span className={cx('nickname')}>2d ago</span>
+                    </Link>
+                  </div>
+                  <div>
+                    <Tippy
+                      placement='bottom-end'
+                      interactive={true}
+                      render={(attrs) => (
+                        <div className={cx('option')} tabIndex='-1' {...attrs}>
+                          <Wrapper>
+                            <button
+                              className={cx('btn-delete')}
+                              onClick={() => {
+                                handleDeleteComment(comment.id)
+                              }}
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
+                              Delete
+                            </button>
+                          </Wrapper>
+                        </div>
+                      )}
+                    >
+                      <button className={cx('btn-option')}>
+                        <MoreIcon />
+                      </button>
+                    </Tippy>
+                  </div>
                 </div>
               ))}
             </div>
+          </div>
+          <div className={cx('add-comment')}>
+            <form className={cx('comment-wrapper')} onSubmit={onSubmit}>
+              <div className={cx('comment-input')}>
+                <input type='text' placeholder='Add a comment...' {...register('comment')} />
+              </div>
+              <button type='submit' className={cx('btn-post')}>
+                Post
+              </button>
+            </form>
           </div>
         </div>
       </div>

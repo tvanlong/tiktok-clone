@@ -23,3 +23,5 @@ export const unlikeVideo = (id) => http.post(`videos/${id}/unlike`)
 
 // Comment
 export const getComments = (id) => http.get(`videos/${id}/comments`)
+export const postComment = (id, data) => http.post(`videos/${id}/comments`, data)
+export const deleteComment = (id) => http.delete(`comments/${id}`)

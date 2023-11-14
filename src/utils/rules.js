@@ -53,3 +53,11 @@ export const userSchema = yup.object({
     .required('Name is required'),
   bio: yup.string().max(80, 'Bio must not exceed 80 characters').required('Bio is required')
 })
+
+export const commentSchema = yup.object({
+  comment: yup
+    .string()
+    .min(1, 'Comment must be at least 1 character')
+    .max(160, 'Comment must not exceed 160 characters')
+    .required('Comment is required')
+})
