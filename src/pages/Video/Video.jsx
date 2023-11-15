@@ -1,31 +1,36 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import ReactDOM from 'react-dom'
+import { AppContext } from '~/contexts/app.context'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import formatDuration from 'format-duration'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CloseIcon, MoreIcon, Muted, NextIcon, PauseBtn, PlayBtn, PrevIcon, Unmuted } from '~/constants/icons'
 import { faHeart, faCommentDots, faBookmark, faShare, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { toast } from 'react-toastify'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { commentSchema } from '~/utils/rules'
+import { deleteComment, getComments, postComment } from '~/apis/auth.api'
 import Image from '~/components/Image/Image'
 import Button from '~/components/Button'
 import ReactButton from '~/components/ReactButton'
-import { toast } from 'react-toastify'
-import classNames from 'classnames/bind'
-import styles from './Video.module.scss'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { deleteComment, getComments, postComment } from '~/apis/auth.api'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { commentSchema } from '~/utils/rules'
 import Tippy from '@tippyjs/react/headless'
 import Wrapper from '~/components/Wrapper'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import formatDuration from 'format-duration'
+import formatTime from '~/utils/formatTime'
+import classNames from 'classnames/bind'
+import styles from './Video.module.scss'
+import { getProfile } from '~/utils/auth'
 
 const cx = classNames.bind(styles)
 
 function Video() {
+  const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
-  const { state } = useLocation()
-  const video = state.video
+  const { state, key } = useLocation()
+  const video = state.video || state.nextVideo
+  const videoList = state.videoList
   const navigate = useNavigate()
   const videoRef = useRef()
   const progressBarRef = useRef()
@@ -46,7 +51,7 @@ function Video() {
   })
 
   const { data: commentsData } = useQuery({
-    queryKey: ['video', video.id],
+    queryKey: ['comments', video.id],
     queryFn: () => getComments(video.id)
   })
 
@@ -117,15 +122,53 @@ function Video() {
     })
   }
 
+  const goNextVideo = () => {
+    const currentVideoIndex = videoList.findIndex((item) => item.id === video.id)
+    if (currentVideoIndex === videoList.length - 1) {
+      navigate('/')
+    } else {
+      const nextVideo = videoList[currentVideoIndex + 1]
+      if (nextVideo) {
+        navigate(`/@${nextVideo.user.nickname}/video/${nextVideo.uuid}`, {
+          state: {
+            nextVideo,
+            videoList
+          },
+          key: nextVideo.id // key để React biết component Video đã được render trước đó và sẽ không render lại component này
+          // Dùng để lưu trữ state của component Video trước đó, tránh việc next video bị render lại video cũ
+        })
+      }
+    }
+  }
+
+  const goPrevVideo = () => {
+    const currentVideoIndex = videoList.findIndex((item) => item.id === video.id)
+    if (currentVideoIndex === 0) {
+      navigate('/')
+    } else {
+      const prevVideo = videoList[currentVideoIndex - 1]
+      if (prevVideo) {
+        navigate(`/@${prevVideo.user.nickname}/video/${prevVideo.uuid}`, {
+          state: {
+            prevVideo,
+            videoList
+          },
+          key: prevVideo.id // key để React biết component Video đã được render trước đó và sẽ không render lại component này
+          // Dùng để lưu trữ state của component Video trước đó, tránh việc prev video bị render lại video cũ
+        })
+      }
+    }
+  }
+
   return ReactDOM.createPortal(
     // gắn component Modal vào document.body element
-    <React.Fragment>
+    <React.Fragment key={key}>
       <div className={cx('modal-wrapper')} aria-modal aria-hidden tabIndex={-1} role='dialog'>
         <div className={cx('modal-left')}>
           <button
             className={cx('btn-close')}
             onClick={() => {
-              navigate(-1)
+              navigate('/')
             }}
           >
             <CloseIcon />
@@ -135,10 +178,10 @@ function Video() {
               <MoreIcon />
             </button>
             <div className={cx('btn-controls')}>
-              <button className={cx('btn-prev')}>
+              <button className={cx('btn-prev')} onClick={goPrevVideo}>
                 <PrevIcon />
               </button>
-              <button className={cx('btn-next')}>
+              <button className={cx('btn-next')} onClick={goNextVideo}>
                 <NextIcon />
               </button>
             </div>
@@ -198,7 +241,7 @@ function Video() {
                 <Link to={`/@${video.user.nickname}`} className={cx('name')}>
                   <span className={cx('username')}>{video.user.nickname}</span>
                   <span className={cx('nickname')}>
-                    {video.user.first_name} {video.user.last_name} · 2d ago
+                    {video.user.first_name} {video.user.last_name} · {formatTime(video.created_at)}
                   </span>
                 </Link>
                 {!video.user.is_followed && (
@@ -261,33 +304,35 @@ function Video() {
                     <Link to={`/@${comment.user.nickname}`} className={cx('name')}>
                       <span className={cx('username')}>{comment.user.nickname}</span>
                       <span className={cx('comment')}>{comment.comment}</span>
-                      <span className={cx('nickname')}>2d ago</span>
+                      <span className={cx('nickname')}>{formatTime(comment.created_at)}</span>
                     </Link>
                   </div>
                   <div>
-                    <Tippy
-                      placement='bottom-end'
-                      interactive={true}
-                      render={(attrs) => (
-                        <div className={cx('option')} tabIndex='-1' {...attrs}>
-                          <Wrapper>
-                            <button
-                              className={cx('btn-delete')}
-                              onClick={() => {
-                                handleDeleteComment(comment.id)
-                              }}
-                            >
-                              <FontAwesomeIcon icon={faTrash} />
-                              Delete
-                            </button>
-                          </Wrapper>
-                        </div>
-                      )}
-                    >
-                      <button className={cx('btn-option')}>
-                        <MoreIcon />
-                      </button>
-                    </Tippy>
+                    {isAuthenticated && comment.user.id === getProfile('profile').id && (
+                      <Tippy
+                        placement='bottom-end'
+                        interactive={true}
+                        render={(attrs) => (
+                          <div className={cx('option')} tabIndex='-1' {...attrs}>
+                            <Wrapper>
+                              <button
+                                className={cx('btn-delete')}
+                                onClick={() => {
+                                  handleDeleteComment(comment.id)
+                                }}
+                              >
+                                <FontAwesomeIcon icon={faTrash} />
+                                Delete
+                              </button>
+                            </Wrapper>
+                          </div>
+                        )}
+                      >
+                        <button className={cx('btn-option')}>
+                          <MoreIcon />
+                        </button>
+                      </Tippy>
+                    )}
                   </div>
                 </div>
               ))}

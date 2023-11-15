@@ -58,7 +58,8 @@ function Home() {
   const navigateToVideo = (nickname, uuid, video) => {
     navigate(`/@${nickname}/video/${uuid}`, {
       state: {
-        video
+        video,
+        videoList
       }
     })
   }
