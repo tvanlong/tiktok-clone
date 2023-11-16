@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import ListAcount from '~/components/ListAccount'
+import ListAccount from '~/components/ListAccount'
 import { getFollowingList } from '~/apis/followingList.api'
+import SidebarLoader from '~/contents/SidebarLoader'
 
 const INIT_PAGE = 1
 
 function FollowingUsers() {
   const [followingUsers, setFollowingUsers] = useState([])
   const [isSeeAllFollowing, setIsSeeAllFollowing] = useState(false)
-  const { data: followingUsersData } = useQuery({
+  const { data: followingUsersData, isLoading } = useQuery({
     queryKey: ['followingUsers'],
     queryFn: () => getFollowingList(INIT_PAGE)
   })
@@ -23,8 +24,10 @@ function FollowingUsers() {
     setIsSeeAllFollowing(!isSeeAllFollowing)
   }
 
+  if (isLoading) return <SidebarLoader />
+
   return (
-    <ListAcount
+    <ListAccount
       label='Following accounts'
       userData={followingUsers}
       onViewChange={handleFollowingViewChange}

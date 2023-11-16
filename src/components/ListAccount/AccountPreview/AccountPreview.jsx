@@ -13,7 +13,14 @@ const cx = classNames.bind(styles)
 function AccountPreview({ user }) {
   const queryClient = useQueryClient()
   const { mutate } = useMutation({
-    mutationFn: (id) => followUser(id)
+    mutationFn: (id) => followUser(id),
+    onSuccess: (data) => {
+      // Nếu follow thì sẽ update lại data khi navigate tới trang profile của user đó
+      queryClient.setQueryData(['user', data.data.data.nickname], {
+        ...data.data.data,
+        is_followed: true
+      })
+    }
   })
 
   const handleFollow = (id) => {
@@ -52,9 +59,9 @@ function AccountPreview({ user }) {
           {user.first_name} {user.last_name}
         </p>
         <p className={cx('analytics')}>
-          <strong className={cx('value')}>{user.followers_count}M </strong>
+          <strong className={cx('value')}>{user.followers_count}</strong>
           <span className={cx('label')}>Followers</span>
-          <strong className={cx('value')}>{user.likes_count}M </strong>
+          <strong className={cx('value')}>{user.likes_count}</strong>
           <span className={cx('label')}>Likes</span>
         </p>
       </div>

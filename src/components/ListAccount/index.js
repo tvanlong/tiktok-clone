@@ -1,3 +1,3 @@
-import ListAcount from './ListAccount'
+import ListAccount from './ListAccount'
 
-export default ListAcount
+export default ListAccount
