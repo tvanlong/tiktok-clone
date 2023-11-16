@@ -25,14 +25,7 @@ function Home() {
   const videoList = data?.data?.data
 
   const followAccountMutation = useMutation({
-    mutationFn: (id) => followUser(id),
-    onSuccess: (data) => {
-      // Nếu follow thì sẽ update lại data khi navigate tới trang profile của user đó
-      queryClient.setQueryData(['user', data.data.data.nickname], {
-        ...data.data.data,
-        is_followed: true
-      })
-    }
+    mutationFn: (id) => followUser(id)
   })
 
   const handlePrefetchingUser = (nickname) => {
@@ -48,7 +41,7 @@ function Home() {
       onSuccess: () => {
         refetch()
         toast.success('Followed', {
-          timeClose: 1000
+          autoCloseClose: 1000
         })
         queryClient.invalidateQueries({
           queryKey: ['followingUsers'],

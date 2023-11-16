@@ -13,21 +13,14 @@ const cx = classNames.bind(styles)
 function AccountPreview({ user }) {
   const queryClient = useQueryClient()
   const { mutate } = useMutation({
-    mutationFn: (id) => followUser(id),
-    onSuccess: (data) => {
-      // Nếu follow thì sẽ update lại data khi navigate tới trang profile của user đó
-      queryClient.setQueryData(['user', data.data.data.nickname], {
-        ...data.data.data,
-        is_followed: true
-      })
-    }
+    mutationFn: (id) => followUser(id)
   })
 
   const handleFollow = (id) => {
     mutate(id, {
       onSuccess: () => {
         toast.success('Followed', {
-          timeClose: 1000
+          autoClose: 1000
         })
         // refetch data mỗi khi follow user
         queryClient.invalidateQueries({
