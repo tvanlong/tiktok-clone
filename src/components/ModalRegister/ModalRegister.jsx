@@ -42,8 +42,7 @@ function ModalRegister({ handleSwitchModal }) {
     const formData = omit(data, ['confirm_password'])
     const registerData = { type: 'email', ...formData }
     registerAccountMutation.mutate(registerData, {
-      onSuccess: (res) => {
-        console.log(res)
+      onSuccess: () => {
         handleSwitchModal()
         toast.success('Register successfully')
       },
@@ -63,43 +62,50 @@ function ModalRegister({ handleSwitchModal }) {
       {showModal && (
         <div className={cx('modal')}>
           <div onClick={toggleModal} className={cx('overlay')}></div>
-          <div className={cx('modal-content')}>
-            <form className={cx('modal-form')} onSubmit={onSubmit}>
-              <h2 className={cx('title')}>Sign Up</h2>
-              <div className={cx('text')}>Email</div>
-              <div className={cx('input-wrapper')}>
-                <input
-                  type='text'
-                  placeholder='Email'
-                  onChange={(event) => handleClearError(event)}
-                  {...register('email')}
-                />
-                <div className={cx('err')}>{errors.email?.message}</div>
+          {!registerAccountMutation.isPending ? (
+            <div className={cx('modal-content')}>
+              <form className={cx('modal-form')} onSubmit={onSubmit}>
+                <h2 className={cx('title')}>Sign Up</h2>
+                <div className={cx('text')}>Email</div>
+                <div className={cx('input-wrapper')}>
+                  <input
+                    type='text'
+                    placeholder='Email'
+                    onChange={(event) => handleClearError(event)}
+                    {...register('email')}
+                  />
+                  <div className={cx('err')}>{errors.email?.message}</div>
+                </div>
+                <div className={cx('input-wrapper')}>
+                  <input type='password' placeholder='Password' {...register('password')} />
+                  <div className={cx('err')}>{errors.password?.message}</div>
+                </div>
+                <div className={cx('input-wrapper')}>
+                  <input type='password' placeholder='Confirm password' {...register('confirm_password')} />
+                  <div className={cx('err')}>{errors.confirm_password?.message}</div>
+                </div>
+                <button className={cx('close-modal')} onClick={toggleModal}>
+                  <FontAwesomeIcon className={cx('icon')} icon={faTimes} />
+                </button>
+                <Button
+                  type='submit'
+                  disabled={registerAccountMutation.isPending}
+                  primary
+                  className={cx('btn-login-modal')}
+                >
+                  Sign up
+                </Button>
+              </form>
+              <div className={cx('text-signup')}>
+                Have an account? <span onClick={handleSwitchModal}>Log in</span>
               </div>
-              <div className={cx('input-wrapper')}>
-                <input type='password' placeholder='Password' {...register('password')} />
-                <div className={cx('err')}>{errors.password?.message}</div>
-              </div>
-              <div className={cx('input-wrapper')}>
-                <input type='password' placeholder='Confirm password' {...register('confirm_password')} />
-                <div className={cx('err')}>{errors.confirm_password?.message}</div>
-              </div>
-              <button className={cx('close-modal')} onClick={toggleModal}>
-                <FontAwesomeIcon className={cx('icon')} icon={faTimes} />
-              </button>
-              <Button
-                type='submit'
-                disabled={registerAccountMutation.isPending}
-                primary
-                className={cx('btn-login-modal')}
-              >
-                Sign up
-              </Button>
-            </form>
-            <div className={cx('text-signup')}>
-              Have an account? <span onClick={handleSwitchModal}>Log in</span>
             </div>
-          </div>
+          ) : (
+            <div className={cx('loading')}>
+              <div></div>
+              <div></div>
+            </div>
+          )}
         </div>
       )}
     </>

@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
 import Tippy from '@tippyjs/react/headless'
 import 'tippy.js/dist/tippy.css'
 import Wrapper from '~/components/Wrapper'
@@ -8,11 +9,11 @@ import Button from '~/components/Button'
 import Header from './Header'
 import { useMutation } from '@tanstack/react-query'
 import { logoutAccount } from '~/apis/auth.api'
-import { toast } from 'react-toastify'
 import { AppContext } from '~/contexts/app.context'
 import { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getProfile } from '~/utils/auth'
+import { toast } from 'react-toastify'
 
 const cx = classNames.bind(styles)
 
@@ -31,13 +32,11 @@ function Menu({ children, items = [], setIsAuthenticated }) {
 
   const handleLogout = () => {
     logoutMutation.mutate()
-    toast.success('Logout successfully!', {
-      position: 'top-center',
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true
-    })
     setProfile(null)
+    toast.success('Đăng xuất thành công', {
+      position: 'top-center',
+      autoClose: 1000
+    })
   }
 
   const handleNext = (item) => {
@@ -76,6 +75,19 @@ function Menu({ children, items = [], setIsAuthenticated }) {
         </Button>
       )
     })
+  }
+
+  if (logoutMutation.isPending) {
+    return ReactDOM.createPortal(
+      <div className={cx('modal')}>
+        <div className={cx('overlay')}></div>
+        <div className={cx('loading')}>
+          <div></div>
+          <div></div>
+        </div>
+      </div>,
+      document.body
+    )
   }
 
   return (

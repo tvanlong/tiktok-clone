@@ -41,7 +41,7 @@ function ModalLogin({ handleSwitchModal }) {
       onSuccess: (data) => {
         setShowModal(false)
         toast.success('Login successfully', {
-          autoClose: 2000
+          autoClose: 1000
         })
         setIsAuthenticated(true)
         setProfile(data.data.data)
@@ -49,7 +49,7 @@ function ModalLogin({ handleSwitchModal }) {
       onError: (err) => {
         if (err.response.status === 401) {
           toast.error('Email or password is incorrect', {
-            autoClose: 2000
+            autoClose: 1000
           })
         }
       }
@@ -61,34 +61,46 @@ function ModalLogin({ handleSwitchModal }) {
       {showModal && (
         <div className={cx('modal')}>
           <div onClick={toggleModal} className={cx('overlay')}></div>
-          <div className={cx('modal-content')}>
-            <form className={cx('modal-form')} onSubmit={onSubmit}>
-              <h2 className={cx('title')}>Log In</h2>
-              <div className={cx('text')}>Email</div>
-              <div className={cx('input-wrapper')}>
-                <input
-                  type='text'
-                  placeholder='Email'
-                  onChange={(event) => handleClearError(event)}
-                  {...register('email')}
-                />
-                <div className={cx('err')}>{errors.email?.message}</div>
+          {!loginAccountMutation.isPending ? (
+            <div className={cx('modal-content')}>
+              <form className={cx('modal-form')} onSubmit={onSubmit}>
+                <h2 className={cx('title')}>Log In</h2>
+                <div className={cx('text')}>Email</div>
+                <div className={cx('input-wrapper')}>
+                  <input
+                    type='text'
+                    placeholder='Email'
+                    onChange={(event) => handleClearError(event)}
+                    {...register('email')}
+                  />
+                  <div className={cx('err')}>{errors.email?.message}</div>
+                </div>
+                <div className={cx('input-wrapper')}>
+                  <input type='password' placeholder='Password' {...register('password')} />
+                  <div className={cx('err')}>{errors.password?.message}</div>
+                </div>
+                <button className={cx('close-modal')} onClick={toggleModal}>
+                  <FontAwesomeIcon className={cx('icon')} icon={faTimes} />
+                </button>
+                <Button
+                  type='submit'
+                  disabled={loginAccountMutation.isPending}
+                  primary
+                  className={cx('btn-login-modal')}
+                >
+                  Log in
+                </Button>
+              </form>
+              <div className={cx('text-signup')}>
+                Don't have an account? <span onClick={handleSwitchModal}>Sign up</span>
               </div>
-              <div className={cx('input-wrapper')}>
-                <input type='password' placeholder='Password' {...register('password')} />
-                <div className={cx('err')}>{errors.password?.message}</div>
-              </div>
-              <button className={cx('close-modal')} onClick={toggleModal}>
-                <FontAwesomeIcon className={cx('icon')} icon={faTimes} />
-              </button>
-              <Button type='submit' disabled={loginAccountMutation.isPending} primary className={cx('btn-login-modal')}>
-                Log in
-              </Button>
-            </form>
-            <div className={cx('text-signup')}>
-              Don't have an account? <span onClick={handleSwitchModal}>Sign up</span>
             </div>
-          </div>
+          ) : (
+            <div className={cx('loading')}>
+              <div></div>
+              <div></div>
+            </div>
+          )}
         </div>
       )}
     </>

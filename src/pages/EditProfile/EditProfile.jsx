@@ -1,17 +1,18 @@
-import classNames from 'classnames/bind'
-import styles from './EditProfile.module.scss'
+import { useContext, useEffect, useState } from 'react'
+import ReactDOM from 'react-dom'
+import { AppContext } from '~/contexts/app.context'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import Image from '~/components/Image'
 import { EditAvatar } from '~/constants/icons'
 import Button from '~/components/Button'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
 import { userSchema } from '~/utils/rules'
-import { useContext, useEffect, useState } from 'react'
 import { getCurrentUser, updateProfile } from '~/apis/auth.api'
 import { getProfile as getProfileFromLS } from '~/utils/auth'
-import { AppContext } from '~/contexts/app.context'
-import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
+import classNames from 'classnames/bind'
+import styles from './EditProfile.module.scss'
 
 const cx = classNames.bind(styles)
 
@@ -56,24 +57,32 @@ function EditProfile() {
   }, [setValue, user])
 
   const onSubmit = handleSubmit(async (data) => {
-    const form = new FormData()
-    // const addToFormData = ['avatar', 'first_name', 'last_name', 'nickname', 'bio']
-    // addToFormData.forEach((key) => {
-    //   form.append(key, data[key])
-    // })
-    form.append('avatar', file)
-    form.append('first_name', data.first_name)
-    form.append('last_name', data.last_name)
-    form.append('nickname', data.nickname)
-    form.append('bio', data.bio)
-    const res = await updateProfileMutation.mutateAsync(form)
-    setProfile(res.data.data)
-    localStorage.setItem('profile', JSON.stringify(res.data.data))
-    refetch()
-    toast.success('Your profile is updated', {
-      autoClose: 1000,
-      theme: 'colored'
-    })
+    // Kiểm tra nếu không thay đổi gì rồi ấn save thì không gọi api
+    if (
+      data.avatar === user.avatar &&
+      data.first_name === user.first_name &&
+      data.last_name === user.last_name &&
+      data.nickname === user.nickname &&
+      data.bio === user.bio
+    ) {
+      return
+    } else {
+      // Kiểm tra nếu có thay đổi thì gọi api
+      const form = new FormData()
+      form.append('avatar', file)
+      form.append('first_name', data.first_name)
+      form.append('last_name', data.last_name)
+      form.append('nickname', data.nickname)
+      form.append('bio', data.bio)
+      const res = await updateProfileMutation.mutateAsync(form)
+      setProfile(res.data.data)
+      localStorage.setItem('profile', JSON.stringify(res.data.data))
+      refetch()
+      toast.success('Your profile is updated', {
+        autoClose: 1000,
+        theme: 'colored'
+      })
+    }
   })
 
   const handleLimitTextarea = (e) => {
@@ -100,6 +109,18 @@ function EditProfile() {
       reader.readAsDataURL(file)
     }
   }
+
+  if (updateProfileMutation.isPending)
+    return ReactDOM.createPortal(
+      <div className={cx('modal')}>
+        <div className={cx('overlay')}></div>
+        <div className={cx('loading')}>
+          <div></div>
+          <div></div>
+        </div>
+      </div>,
+      document.body
+    )
 
   return (
     <div className={cx('wrapper')}>
