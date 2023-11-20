@@ -73,5 +73,6 @@ ReactButton.propTypes = {
   icon: PropTypes.object.isRequired,
   count: PropTypes.number,
   react: PropTypes.bool,
-  video: PropTypes.object
+  video: PropTypes.object,
+  className: PropTypes.string
 }

@@ -57,6 +57,7 @@ function EditProfile() {
   }, [setValue, user])
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log(data)
     // Kiểm tra nếu không thay đổi gì rồi ấn save thì không gọi api
     if (
       data.avatar === user.avatar &&
@@ -66,6 +67,20 @@ function EditProfile() {
       data.bio === user.bio
     ) {
       return
+    } else if (data.avatar === user.avatar) {
+      const form = new FormData()
+      form.append('first_name', data.first_name)
+      form.append('last_name', data.last_name)
+      form.append('nickname', data.nickname)
+      form.append('bio', data.bio)
+      const res = await updateProfileMutation.mutateAsync(form)
+      setProfile(res.data.data)
+      localStorage.setItem('profile', JSON.stringify(res.data.data))
+      refetch()
+      toast.success('Your profile is updated', {
+        autoClose: 1000,
+        theme: 'colored'
+      })
     } else {
       // Kiểm tra nếu có thay đổi thì gọi api
       const form = new FormData()
@@ -165,7 +180,7 @@ function EditProfile() {
             <div className={cx('item-container')}>
               <div className={cx('label')}>Nick Name</div>
               <div className={cx('edit-area')}>
-                <input type='text' placeholder='Nickname' {...register('nickname')}></input>
+                <input disabled type='text' placeholder='Nickname' {...register('nickname')}></input>
                 <div className={cx('err')}>{errors.nickname?.message}</div>
                 <p>Your nickname can only be changed once every 7 days.</p>
               </div>
