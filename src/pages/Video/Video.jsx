@@ -29,7 +29,7 @@ function Video() {
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
   const { state, key } = useLocation()
-  const video = state.video || state.nextVideo
+  const video = state.video || state.nextVideo || state.prevVideo
   const videoList = state.videoList
   const navigate = useNavigate()
   const videoRef = useRef()
@@ -161,7 +161,6 @@ function Video() {
   }
 
   return ReactDOM.createPortal(
-    // gắn component Modal vào document.body element
     <React.Fragment key={key}>
       <div className={cx('modal-wrapper')} aria-modal aria-hidden tabIndex={-1} role='dialog'>
         <div className={cx('modal-left')}>
@@ -287,56 +286,63 @@ function Video() {
               </div>
             </div>
             <div className={cx('tab-menu-wrapper')}></div>
-            <div className={cx('comment-item-wrapper')}>
-              {comments?.map((comment) => (
-                <div className={cx('comment-item')} key={comment.id}>
-                  <div className={cx('info')}>
-                    <Link to={`/@${comment.user.nickname}`} className={cx('avatar')}>
-                      <Image
-                        src={
-                          comment.user.avatar !== 'https://files.fullstack.edu.vn/f8-tiktok/'
-                            ? comment.user.avatar
-                            : 'https://i.pinimg.com/736x/9a/63/e1/9a63e148aaff53532b045f6d1f09d762.jpg'
-                        }
-                        alt={comment.user.nickname}
-                      />
-                    </Link>
-                    <Link to={`/@${comment.user.nickname}`} className={cx('name')}>
-                      <span className={cx('username')}>{comment.user.nickname}</span>
-                      <span className={cx('comment')}>{comment.comment}</span>
-                      <span className={cx('nickname')}>{formatTime(comment.created_at)}</span>
-                    </Link>
+            {!postCommentMutation.isPending ? (
+              <div className={cx('comment-item-wrapper')}>
+                {comments?.map((comment) => (
+                  <div className={cx('comment-item')} key={comment.id}>
+                    <div className={cx('info')}>
+                      <Link to={`/@${comment.user.nickname}`} className={cx('avatar')}>
+                        <Image
+                          src={
+                            comment.user.avatar !== 'https://files.fullstack.edu.vn/f8-tiktok/'
+                              ? comment.user.avatar
+                              : 'https://i.pinimg.com/736x/9a/63/e1/9a63e148aaff53532b045f6d1f09d762.jpg'
+                          }
+                          alt={comment.user.nickname}
+                        />
+                      </Link>
+                      <Link to={`/@${comment.user.nickname}`} className={cx('name')}>
+                        <span className={cx('username')}>{comment.user.nickname}</span>
+                        <span className={cx('comment')}>{comment.comment}</span>
+                        <span className={cx('nickname')}>{formatTime(comment.created_at)}</span>
+                      </Link>
+                    </div>
+                    <div>
+                      {isAuthenticated && comment.user.id === getProfile('profile').id && (
+                        <Tippy
+                          placement='bottom-end'
+                          interactive={true}
+                          render={(attrs) => (
+                            <div className={cx('option')} tabIndex='-1' {...attrs}>
+                              <Wrapper>
+                                <button
+                                  className={cx('btn-delete')}
+                                  onClick={() => {
+                                    handleDeleteComment(comment.id)
+                                  }}
+                                >
+                                  <FontAwesomeIcon icon={faTrash} />
+                                  Delete
+                                </button>
+                              </Wrapper>
+                            </div>
+                          )}
+                        >
+                          <button className={cx('btn-option')}>
+                            <MoreIcon />
+                          </button>
+                        </Tippy>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    {isAuthenticated && comment.user.id === getProfile('profile').id && (
-                      <Tippy
-                        placement='bottom-end'
-                        interactive={true}
-                        render={(attrs) => (
-                          <div className={cx('option')} tabIndex='-1' {...attrs}>
-                            <Wrapper>
-                              <button
-                                className={cx('btn-delete')}
-                                onClick={() => {
-                                  handleDeleteComment(comment.id)
-                                }}
-                              >
-                                <FontAwesomeIcon icon={faTrash} />
-                                Delete
-                              </button>
-                            </Wrapper>
-                          </div>
-                        )}
-                      >
-                        <button className={cx('btn-option')}>
-                          <MoreIcon />
-                        </button>
-                      </Tippy>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className={cx('loading')}>
+                <div></div>
+                <div></div>
+              </div>
+            )}
           </div>
           <div className={cx('add-comment')}>
             <form className={cx('comment-wrapper')} onSubmit={onSubmit}>

@@ -28,7 +28,7 @@ function FollowingUsers() {
 
   return (
     <ListAccount
-      label='Following accounts'
+      label='Recently following accounts'
       userData={followingUsers}
       onViewChange={handleFollowingViewChange}
       isSeeAll={isSeeAllFollowing}

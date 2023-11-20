@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import AccountItem from './AccountItem'
 import styles from './ListAccount.module.scss'
@@ -5,23 +6,23 @@ import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
 
-function ListAcount({ label, userData = [], onViewChange, isSeeAll }) {
+function ListAccount({ label, userData = [], onViewChange, isSeeAll }) {
+  const [visibleUserData, setVisibleUserData] = useState([])
+
+  useEffect(() => {
+    if (isSeeAll) {
+      setVisibleUserData(userData)
+    } else {
+      setVisibleUserData(userData.slice(0, 5))
+    }
+  }, [isSeeAll, userData])
+
   return (
     <div className={cx('wrapper')}>
       <p className={cx('label')}>{label}</p>
-      {!isSeeAll ? (
-        <>
-          {userData.slice(0, 5).map((user) => (
-            <AccountItem key={user.id} user={user} />
-          ))}
-        </>
-      ) : (
-        <>
-          {userData.map((user) => (
-            <AccountItem key={user.id} user={user} />
-          ))}
-        </>
-      )}
+      {visibleUserData.map((user) => (
+        <AccountItem key={user.id} user={user} />
+      ))}
       {userData.length > 5 && (
         <p className={cx('more-btn')} onClick={onViewChange}>
           {isSeeAll ? 'See less' : 'See all'}
@@ -31,11 +32,11 @@ function ListAcount({ label, userData = [], onViewChange, isSeeAll }) {
   )
 }
 
-ListAcount.propTypes = {
+ListAccount.propTypes = {
   label: PropTypes.string.isRequired,
-  userData: PropTypes.array,
+  userData: PropTypes.array.isRequired,
   onViewChange: PropTypes.func.isRequired,
   isSeeAll: PropTypes.bool.isRequired
 }
 
-export default ListAcount
+export default ListAccount

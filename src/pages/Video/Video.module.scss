@@ -332,6 +332,61 @@
   }
 }
 
+// Loading
+
+.loading {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > div {
+    width: 20px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0;
+    position: relative;
+  }
+
+  & > div:nth-child(1) {
+    background: #fe2c55;
+    animation: clockwise 1200ms infinite linear;
+  }
+
+  & > div:nth-child(2) {
+    mix-blend-mode: darken;
+    background: #25f4ee;
+    margin-left: -5px;
+    animation: counter-clockwise 1200ms infinite linear;
+  }
+}
+
+@keyframes clockwise {
+  0% {
+    transform: translateX(0);
+    width: 20px;
+  }
+
+  25% {
+    width: 25px;
+  }
+
+  50% {
+    transform: translateX(100%);
+    width: 20px;
+  }
+}
+
+@keyframes counter-clockwise {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-100%);
+  }
+}
+
 
 
 
