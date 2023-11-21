@@ -61,3 +61,12 @@ export const commentSchema = yup.object({
     .max(160, 'Comment must not exceed 160 characters')
     .required('Comment is required')
 })
+
+export const videoSchema = yup.object({
+  description: yup
+    .string()
+    .min(3, 'Description must be at least 3 characters')
+    .max(160, 'Description must not exceed 160 characters')
+    .required('Description is required'),
+  upload_file: yup.string().required('Video is required')
+})

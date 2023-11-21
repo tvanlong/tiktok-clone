@@ -12,11 +12,11 @@ import Menu from '~/components/Menu'
 import { DesktopApp, InboxIcon, MessageIcon, MoreIcon } from '~/constants/icons'
 import Image from '~/components/Image'
 import Search from './components/Search'
-import classNames from 'classnames/bind'
-import styles from './Header.module.scss'
 import { Link } from 'react-router-dom'
 import path from '~/constants/path'
 import { menuItems, userMenu } from '~/constants/menu'
+import classNames from 'classnames/bind'
+import styles from './Header.module.scss'
 
 const cx = classNames.bind(styles)
 
@@ -33,7 +33,7 @@ function Header() {
         {isAuthenticated ? (
           <>
             <div className={cx('actions')}>
-              <Button className={cx('btn-upload-hover')} icon={<FontAwesomeIcon icon={faPlus} />}>
+              <Button to={path.upload} className={cx('btn-upload-hover')} icon={<FontAwesomeIcon icon={faPlus} />}>
                 Upload
               </Button>
               <div>
