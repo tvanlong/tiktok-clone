@@ -57,7 +57,6 @@ function EditProfile() {
   }, [setValue, user])
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data)
     // Kiểm tra nếu không thay đổi gì rồi ấn save thì không gọi api
     if (
       data.avatar === user.avatar &&
@@ -68,6 +67,7 @@ function EditProfile() {
     ) {
       return
     } else if (data.avatar === user.avatar) {
+      // Kiểm tra nếu không thay đổi avatar thì gọi api
       const form = new FormData()
       form.append('first_name', data.first_name)
       form.append('last_name', data.last_name)

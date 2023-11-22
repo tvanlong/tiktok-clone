@@ -1,29 +1,41 @@
 import { useRef, useState } from 'react'
+import ReactDOM from 'react-dom'
 import { UploadIcon } from '~/constants/icons'
 import Button from '~/components/Button'
-import classNames from 'classnames/bind'
-import styles from './Upload.module.scss'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { videoSchema } from '~/utils/rules'
+import { useMutation } from '@tanstack/react-query'
+import { createNewVideo } from '~/apis/video.api'
+import { toast } from 'react-toastify'
+import classNames from 'classnames/bind'
+import styles from './Upload.module.scss'
 
 const cx = classNames.bind(styles)
 
 function Upload() {
   const inputRef = useRef()
   const [source, setSource] = useState()
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
+  const [file, setFile] = useState()
+  const { register, handleSubmit } = useForm({
     resolver: yupResolver(videoSchema)
   })
 
   const { ref: fileInputRef, ...fileInputProps } = register('upload_file')
 
+  const createVideoMutation = useMutation({
+    mutationFn: (data) => createNewVideo(data)
+  })
+
   const handleFileChange = (event) => {
     const file = event.target.files[0]
+    setFile(file)
+
+    // Mếu trước đó đã có file thì xóa đi
+    if (source) {
+      URL.revokeObjectURL(source)
+    }
+
     const url = URL.createObjectURL(file)
     setSource(url)
   }
@@ -34,9 +46,32 @@ function Upload() {
     }
   }
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data)
+  const onSubmit = handleSubmit(async (data) => {
+    const formData = new FormData()
+    formData.append('upload_file', file)
+    formData.append('description', data.description)
+    formData.append('thumbnail_time', 2)
+    formData.append('viewable', 'public')
+    formData.append('allows[]', 'comment')
+    await createVideoMutation.mutateAsync(formData)
+    setSource(null)
+    setFile(null)
+    toast.success('Upload video successfully', {
+      autoClose: 1000
+    })
   })
+
+  if (createVideoMutation.isPending)
+    return ReactDOM.createPortal(
+      <div className={cx('modal')}>
+        <div className={cx('overlay')}></div>
+        <div className={cx('loading')}>
+          <div></div>
+          <div></div>
+        </div>
+      </div>,
+      document.body
+    )
 
   return (
     <form className={cx('container')} onSubmit={onSubmit}>
@@ -78,7 +113,13 @@ function Upload() {
           <div className={cx('desc')}>
             <input type='text' placeholder='Description video' {...register('description')} />
             <div className={cx('file-select')}>
-              <Button className={cx('btn-select-file')} primary>
+              <Button
+                className={cx('btn-select-file')}
+                primary
+                {...(createVideoMutation.isLoading && {
+                  disabled: true
+                })}
+              >
                 Publish
               </Button>
             </div>
