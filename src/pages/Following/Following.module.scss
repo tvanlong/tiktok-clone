@@ -1,0 +1,65 @@
+.layout {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.container {
+  width: 736px;
+  padding-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.user-card {
+  position: relative;
+  height: 305px;
+  border-radius: 8px;
+  overflow: hidden;
+
+  video {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.user-info {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-avatar {
+  img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+  }
+}
+
+.user-name {
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  font-size: 1.8rem;
+  line-height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nickname {
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 18px;
+}
+

@@ -8,9 +8,9 @@ import { followUser, getProfile, unfollowUser } from '~/apis/auth.api'
 import { getProfile as getProfileFromLS } from '~/utils/auth'
 import { toast } from 'react-toastify'
 import { AppContext } from '~/contexts/app.context'
+import path from '~/constants/path'
 import classNames from 'classnames/bind'
 import styles from './Profile.module.scss'
-import path from '~/constants/path'
 
 const cx = classNames.bind(styles)
 
