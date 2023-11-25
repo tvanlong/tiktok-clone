@@ -84,6 +84,17 @@ function Profile() {
     user && navigate(path.editProfile)
   }
 
+  const navigateToVideo = (nickname, uuid, video) => {
+    user &&
+      navigate(`/@${nickname}/video/${uuid}`, {
+        state: {
+          video,
+          videoList: user.videos,
+          prevPath: `/@${nickname}`
+        }
+      })
+  }
+
   if (!user) return null
   return (
     <div>
@@ -150,7 +161,11 @@ function Profile() {
         <h4>Videos</h4>
         <div className={cx('videos')}>
           {user.videos.map((video, index) => (
-            <div className={cx('player')} key={video.id || index}>
+            <div
+              className={cx('player')}
+              key={video.id || index}
+              onClick={() => navigateToVideo(user.nickname, video.uuid, video)}
+            >
               <video
                 className={cx('user-video')}
                 poster={video.thumb_url}

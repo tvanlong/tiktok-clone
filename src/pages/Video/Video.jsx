@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { commentSchema } from '~/utils/rules'
 import { deleteComment, getComments, postComment } from '~/apis/auth.api'
+import { getProfile } from '~/utils/auth'
 import Image from '~/components/Image/Image'
 import Button from '~/components/Button'
 import ReactButton from '~/components/ReactButton'
@@ -21,17 +22,18 @@ import formatDuration from 'format-duration'
 import formatTime from '~/utils/formatTime'
 import classNames from 'classnames/bind'
 import styles from './Video.module.scss'
-import { getProfile } from '~/utils/auth'
 
 const cx = classNames.bind(styles)
 
 function Video() {
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
+
   const { state, key } = useLocation()
   const video = state.video || state.nextVideo || state.prevVideo
   const videoList = state.videoList
-  const navigate = useNavigate()
+
   const videoRef = useRef()
   const progressBarRef = useRef()
   const [progress, setProgress] = useState(0)
@@ -58,28 +60,30 @@ function Video() {
   const comments = commentsData?.data?.data
 
   useEffect(() => {
-    const video = videoRef.current
-    const progressBar = progressBarRef.current
+    if (video) {
+      const video = videoRef.current
+      const progressBar = progressBarRef.current
 
-    const updateProgressBar = () => {
-      const value = (video.currentTime / video.duration) * 100
-      setProgress(value)
-      setCurrentTime(video.currentTime)
+      const updateProgressBar = () => {
+        const value = (video.currentTime / video.duration) * 100
+        setProgress(value)
+        setCurrentTime(video.currentTime)
+      }
+
+      const handleProgressBarChange = () => {
+        const seekToTime = (progressBar.value / 100) * video.duration
+        video.currentTime = seekToTime
+      }
+
+      video.addEventListener('timeupdate', updateProgressBar)
+      progressBar.addEventListener('input', handleProgressBarChange)
+
+      return () => {
+        video.removeEventListener('timeupdate', updateProgressBar)
+        progressBar.removeEventListener('input', handleProgressBarChange)
+      }
     }
-
-    const handleProgressBarChange = () => {
-      const seekToTime = (progressBar.value / 100) * video.duration
-      video.currentTime = seekToTime
-    }
-
-    video.addEventListener('timeupdate', updateProgressBar)
-    progressBar.addEventListener('input', handleProgressBarChange)
-
-    return () => {
-      video.removeEventListener('timeupdate', updateProgressBar)
-      progressBar.removeEventListener('input', handleProgressBarChange)
-    }
-  }, [])
+  }, [video])
 
   // Sử dụng thư viện format-duration để định dạng thời gian hiện tại và thời lượng video
   const formattedCurrentTime = useMemo(() => {
@@ -123,16 +127,19 @@ function Video() {
   }
 
   const goNextVideo = () => {
+    videoRef.current.currentTime = 0
+
     const currentVideoIndex = videoList.findIndex((item) => item.id === video.id)
     if (currentVideoIndex === videoList.length - 1) {
-      navigate('/')
+      navigate(state.prevPath)
     } else {
       const nextVideo = videoList[currentVideoIndex + 1]
       if (nextVideo) {
         navigate(`/@${nextVideo.user.nickname}/video/${nextVideo.uuid}`, {
           state: {
             nextVideo,
-            videoList
+            videoList,
+            prevPath: state.prevPath
           },
           key: nextVideo.id // key để React biết component Video đã được render trước đó và sẽ không render lại component này
           // Dùng để lưu trữ state của component Video trước đó, tránh việc next video bị render lại video cũ
@@ -142,16 +149,19 @@ function Video() {
   }
 
   const goPrevVideo = () => {
+    videoRef.current.currentTime = 0
+
     const currentVideoIndex = videoList.findIndex((item) => item.id === video.id)
     if (currentVideoIndex === 0) {
-      navigate('/')
+      navigate(state.prevPath)
     } else {
       const prevVideo = videoList[currentVideoIndex - 1]
       if (prevVideo) {
         navigate(`/@${prevVideo.user.nickname}/video/${prevVideo.uuid}`, {
           state: {
             prevVideo,
-            videoList
+            videoList,
+            prevPath: state.prevPath
           },
           key: prevVideo.id // key để React biết component Video đã được render trước đó và sẽ không render lại component này
           // Dùng để lưu trữ state của component Video trước đó, tránh việc prev video bị render lại video cũ
@@ -167,7 +177,7 @@ function Video() {
           <button
             className={cx('btn-close')}
             onClick={() => {
-              navigate('/')
+              navigate(state.prevPath)
             }}
           >
             <CloseIcon />

@@ -14,6 +14,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import classNames from 'classnames/bind'
 import styles from './Home.module.scss'
+import path from '~/constants/path'
 
 const cx = classNames.bind(styles)
 
@@ -61,7 +62,8 @@ function Home() {
     navigate(`/@${nickname}/video/${uuid}`, {
       state: {
         video,
-        videoList
+        videoList,
+        prevPath: path.home
       }
     })
   }

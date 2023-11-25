@@ -1,14 +1,18 @@
 import { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
 import { useQuery } from '@tanstack/react-query'
 import { getProfile } from '~/apis/auth.api'
+import { useNavigate } from 'react-router-dom'
 import Button from '~/components/Button'
 import Image from '~/components/Image'
 import classNames from 'classnames/bind'
 import styles from './UserVideo.module.scss'
+import path from '~/constants/path'
 
 const cx = classNames.bind(styles)
 
 function UserVideo({ user }) {
+  const navigate = useNavigate()
   const [video, setVideo] = useState()
   const { data } = useQuery({
     queryKey: ['user', user.nickname],
@@ -33,7 +37,14 @@ function UserVideo({ user }) {
   }
 
   return (
-    <div className={cx('user-card')}>
+    <div
+      className={cx('user-card')}
+      onClick={() => {
+        navigate({
+          pathname: path.following.replace('following', `@${user.nickname}`)
+        })
+      }}
+    >
       {video ? (
         <video
           poster={video.thumb_url}
@@ -70,3 +81,7 @@ function UserVideo({ user }) {
 }
 
 export default UserVideo
+
+UserVideo.propTypes = {
+  user: PropTypes.object.isRequired
+}

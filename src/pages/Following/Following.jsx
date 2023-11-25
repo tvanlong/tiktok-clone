@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getFollowingList } from '~/apis/followingList.api'
-import classNames from 'classnames/bind'
-import styles from './Following.module.scss'
 import UserVideo from './components/UserVideo'
 import Skeleton from 'react-loading-skeleton'
+import classNames from 'classnames/bind'
+import styles from './Following.module.scss'
 
 const cx = classNames.bind(styles)
 
