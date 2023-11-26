@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import { useQuery } from '@tanstack/react-query'
 import { getFollowingList } from '~/apis/followingList.api'
 import UserVideo from './components/UserVideo'
@@ -25,6 +26,10 @@ function Following() {
 
   return (
     <div className={cx('layout')}>
+      <Helmet>
+        <title>Following - Watch videos from creators you follow | TikTok </title>
+        <meta name='description' content='Following - Watch videos from creators you follow | TikTok ' />
+      </Helmet>
       {isFetched ? (
         <div className={cx('container')}>
           {followingUsers.length > 0 && followingUsers.map((user) => <UserVideo key={user.id} user={user} />)}

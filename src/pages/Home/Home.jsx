@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from 'react-router-dom'
 import { faHeart, faCommentDots, faBookmark, faShare } from '@fortawesome/free-solid-svg-icons'
 import { getVideoList } from '~/apis/video.api'
@@ -71,6 +72,15 @@ function Home() {
   return (
     <>
       <div className={cx('container')}>
+        <Helmet>
+          <title>TikTok - Make Your Day</title>
+          <meta
+            name='description'
+            content='
+            TikTok - Make Your Day
+          '
+          />
+        </Helmet>
         {isFetched
           ? videoList?.map((video) => (
               <div key={video.id} className={cx('wrapper')}>

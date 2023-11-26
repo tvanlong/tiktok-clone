@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { Helmet } from 'react-helmet'
 import { getSearchUsersByPage } from '~/apis/searchUsers.api'
 import useQueryConfig from '~/hooks/useQueryConfig'
 import { Link } from 'react-router-dom'
@@ -29,6 +30,15 @@ function Search() {
   }
   return (
     <>
+      <Helmet>
+        <title>Find {queryConfig.q} on TikTok | TikTok Search</title>
+        <meta
+          name='description'
+          content='
+          TikTok Search helps you discover thousands of creators, videos and sounds to amplify your creativity and
+          '
+        />
+      </Helmet>
       <div className={cx('container')}>
         <div className={cx('wrapper')}>
           <div className={cx('search-account')}>

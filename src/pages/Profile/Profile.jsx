@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
-import Image from '~/components/Image'
-import Button from '~/components/Button'
+import { Helmet } from 'react-helmet'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { LinkIcon, PlayIcon } from '~/constants/icons'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -8,6 +7,8 @@ import { followUser, getProfile, unfollowUser } from '~/apis/auth.api'
 import { getProfile as getProfileFromLS } from '~/utils/auth'
 import { toast } from 'react-toastify'
 import { AppContext } from '~/contexts/app.context'
+import Image from '~/components/Image'
+import Button from '~/components/Button'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import path from '~/constants/path'
@@ -137,6 +138,17 @@ function Profile() {
 
   return (
     <div>
+      <Helmet>
+        <title>
+          {user.first_name} {user.last_name} (@{user.nickname}) | TikTok
+        </title>
+        <meta
+          name='description'
+          content='
+          TikTok is the destination for short-form mobile videos. Our mission is to capture and present the world&#39;s creativity, knowledge, and precious life moments, directly from the mobile phone. TikTok enables everyone to be a creator, and encourages users to share their passion and creative expression through their videos.
+          '
+        />
+      </Helmet>
       <div className={cx('container')}>
         <div className={cx('bottom-line')}>
           <div className={cx('info-wrapper')}>

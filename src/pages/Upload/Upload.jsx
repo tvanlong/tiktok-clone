@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { Helmet } from 'react-helmet'
 import ReactDOM from 'react-dom'
 import { UploadIcon } from '~/constants/icons'
 import Button from '~/components/Button'
@@ -74,59 +75,70 @@ function Upload() {
     )
 
   return (
-    <form className={cx('container')} onSubmit={onSubmit}>
-      <input
-        ref={(e) => {
-          fileInputRef(e)
-          inputRef.current = e
-        }}
-        type='file'
-        accept='video/*'
-        {...fileInputProps}
-        onChange={handleFileChange}
-      />
-      {!source && (
-        <div className={cx('upload')} onClick={handleChoose}>
-          <UploadIcon />
-          <div className={cx('text-main')}>Select video to upload</div>
-          <div className={cx('sub-text')}>Or drag and drop a file</div>
-          <div className={cx('text-video-info')}>
-            <span>MP4 or WebM</span>
-            <span>720x1280 resolution or higher</span>
-            <span>Up to 10 minutes</span>
-            <span>Less than 10 GB</span>
-          </div>
-          <div className={cx('file-select')}>
-            <Button className={cx('btn-select-file')} primary>
-              Select File
-            </Button>
-          </div>
-        </div>
-      )}
-      {source && (
-        <div className={cx('layout-video')}>
-          <div className={cx('video-wrapper')}>
-            <video controls>
-              <source src={source} />
-            </video>
-          </div>
-          <div className={cx('desc')}>
-            <input type='text' placeholder='Description video' {...register('description')} />
+    <>
+      <Helmet>
+        <title>TikTok Creator Center</title>
+        <meta
+          name='description'
+          content='
+          TikTok Creator Center
+        '
+        />
+      </Helmet>
+      <form className={cx('container')} onSubmit={onSubmit}>
+        <input
+          ref={(e) => {
+            fileInputRef(e)
+            inputRef.current = e
+          }}
+          type='file'
+          accept='video/*'
+          {...fileInputProps}
+          onChange={handleFileChange}
+        />
+        {!source && (
+          <div className={cx('upload')} onClick={handleChoose}>
+            <UploadIcon />
+            <div className={cx('text-main')}>Select video to upload</div>
+            <div className={cx('sub-text')}>Or drag and drop a file</div>
+            <div className={cx('text-video-info')}>
+              <span>MP4 or WebM</span>
+              <span>720x1280 resolution or higher</span>
+              <span>Up to 10 minutes</span>
+              <span>Less than 10 GB</span>
+            </div>
             <div className={cx('file-select')}>
-              <Button
-                className={cx('btn-select-file')}
-                primary
-                {...(createVideoMutation.isLoading && {
-                  disabled: true
-                })}
-              >
-                Publish
+              <Button className={cx('btn-select-file')} primary>
+                Select File
               </Button>
             </div>
           </div>
-        </div>
-      )}
-    </form>
+        )}
+        {source && (
+          <div className={cx('layout-video')}>
+            <div className={cx('video-wrapper')}>
+              <video controls>
+                <source src={source} />
+              </video>
+            </div>
+            <div className={cx('desc')}>
+              <input type='text' placeholder='Description video' {...register('description')} />
+              <div className={cx('file-select')}>
+                <Button
+                  className={cx('btn-select-file')}
+                  primary
+                  {...(createVideoMutation.isLoading && {
+                    disabled: true
+                  })}
+                >
+                  Publish
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </form>
+    </>
   )
 }
 
