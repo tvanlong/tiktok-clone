@@ -8,6 +8,8 @@ import { followUser, getProfile, unfollowUser } from '~/apis/auth.api'
 import { getProfile as getProfileFromLS } from '~/utils/auth'
 import { toast } from 'react-toastify'
 import { AppContext } from '~/contexts/app.context'
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import path from '~/constants/path'
 import classNames from 'classnames/bind'
 import styles from './Profile.module.scss'
@@ -20,7 +22,7 @@ function Profile() {
   const [user, setUser] = useState()
   const { nickname } = useParams()
   const navigate = useNavigate()
-  const { data: userData } = useQuery({
+  const { data: userData, isFetched } = useQuery({
     queryKey: ['user', nickname],
     queryFn: () => getProfile(nickname),
     staleTime: 1000 * 10 // Nếu dữ liệu từ lúc hover tới lúc click vào account item chưa quá 10s thì ko fetch lại
@@ -95,7 +97,44 @@ function Profile() {
       })
   }
 
-  if (!user) return null
+  if (!user || !isFetched)
+    return (
+      <div>
+        <div className={cx('container')}>
+          <div className={cx('bottom-line')}>
+            <div className={cx('info-wrapper')}>
+              <div className={cx('user-info')}>
+                <Skeleton circle={true} height={116} width={116} />
+                <div className={cx('user-title')}>
+                  <h3 className={cx('name')}>
+                    <Skeleton />
+                  </h3>
+                  <div className={cx('nickname')}>
+                    <Skeleton />
+                  </div>
+                </div>
+              </div>
+              <Skeleton count={3} />
+            </div>
+          </div>
+        </div>
+        <div className={cx('videos-wrapper')}>
+          <h4>Videos</h4>
+          <div className={cx('videos')}>
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div className={cx('player')} key={index}>
+                <Skeleton height={200} width={300} duration={2} />
+                <span className={cx('views')}>
+                  <PlayIcon />
+                  <Skeleton />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+
   return (
     <div>
       <div className={cx('container')}>
