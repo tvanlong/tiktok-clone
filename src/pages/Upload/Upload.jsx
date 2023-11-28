@@ -9,12 +9,14 @@ import { videoSchema } from '~/utils/rules'
 import { useMutation } from '@tanstack/react-query'
 import { createNewVideo } from '~/apis/video.api'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 import classNames from 'classnames/bind'
 import styles from './Upload.module.scss'
 
 const cx = classNames.bind(styles)
 
 function Upload() {
+  const { t } = useTranslation(['upload'])
   const inputRef = useRef()
   const [source, setSource] = useState()
   const [file, setFile] = useState()
@@ -99,17 +101,17 @@ function Upload() {
         {!source && (
           <div className={cx('upload')} onClick={handleChoose}>
             <UploadIcon />
-            <div className={cx('text-main')}>Select video to upload</div>
-            <div className={cx('sub-text')}>Or drag and drop a file</div>
+            <div className={cx('text-main')}>{t('Select video to upload')}</div>
+            <div className={cx('sub-text')}>{t('Or drag and drop a file')}</div>
             <div className={cx('text-video-info')}>
-              <span>MP4 or WebM</span>
-              <span>720x1280 resolution or higher</span>
-              <span>Up to 10 minutes</span>
-              <span>Less than 10 GB</span>
+              <span>{t('MP4 or WebM')}</span>
+              <span>{t('720x1280 resolution or higher')}</span>
+              <span>{t('Up to 10 minutes')}</span>
+              <span>{t('Less than 10 GB')}</span>
             </div>
             <div className={cx('file-select')}>
               <Button className={cx('btn-select-file')} primary>
-                Select File
+                {t('Select File')}
               </Button>
             </div>
           </div>
@@ -131,7 +133,7 @@ function Upload() {
                     disabled: true
                   })}
                 >
-                  Publish
+                  {t('Publish')}
                 </Button>
               </div>
             </div>

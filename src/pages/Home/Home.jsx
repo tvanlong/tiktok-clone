@@ -14,12 +14,14 @@ import { getProfile } from '~/apis/auth.api'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import classNames from 'classnames/bind'
+import { useTranslation } from 'react-i18next'
 import styles from './Home.module.scss'
 import path from '~/constants/path'
 
 const cx = classNames.bind(styles)
 
 function Home() {
+  const { t } = useTranslation(['home'])
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const { data, isFetched, refetch } = useQuery({
@@ -110,7 +112,7 @@ function Home() {
                       <p className={cx('caption')}>{video.description}</p>
                       {!video.user.is_followed && (
                         <Button primary className={cx('custom-follow')} onClick={() => handleFollow(video.user.id)}>
-                          Follow
+                          {t('Follow')}
                         </Button>
                       )}
                     </div>

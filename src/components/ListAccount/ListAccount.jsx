@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import AccountItem from './AccountItem'
+import { useTranslation } from 'react-i18next'
 import styles from './ListAccount.module.scss'
 import classNames from 'classnames/bind'
 
 const cx = classNames.bind(styles)
 
 function ListAccount({ label, userData = [], onViewChange, isSeeAll }) {
+  const { t } = useTranslation(['sidebar'])
   const [visibleUserData, setVisibleUserData] = useState([])
 
   useEffect(() => {
@@ -25,7 +27,7 @@ function ListAccount({ label, userData = [], onViewChange, isSeeAll }) {
       ))}
       {userData.length > 5 && (
         <p className={cx('more-btn')} onClick={onViewChange}>
-          {isSeeAll ? 'See less' : 'See all'}
+          {t(isSeeAll ? 'See less' : 'See all')}
         </p>
       )}
     </div>

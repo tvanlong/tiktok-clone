@@ -12,10 +12,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import path from '~/constants/path'
+import { useTranslation } from 'react-i18next'
 
 const cx = classNames.bind(styles)
 
 function Search() {
+  const { t } = useTranslation(['header'])
   const [searchValue, setSearchValue] = useState('')
   const [searchResult, setSearchResult] = useState([])
   const [showSearchResult, setShowSearchResult] = useState(true)
@@ -73,7 +75,7 @@ function Search() {
   const renderResult = (attrs) => (
     <div className={cx('search-result')} tabIndex='-1' {...attrs}>
       <Wrapper>
-        <h4 className={cx('search-title')}>Accounts</h4>
+        <h4 className={cx('search-title')}>{t('Accounts')}</h4>
         {searchResult.map((result) => (
           <AccountItem key={result.id} data={result} />
         ))}
@@ -106,7 +108,7 @@ function Search() {
         <form className={cx('search')} onSubmit={onSubmit}>
           <input
             ref={inputRef}
-            placeholder='Search accounts'
+            placeholder={t('Search accounts')}
             spellCheck={false}
             value={searchValue}
             onChange={(e) => {

@@ -6,12 +6,14 @@ import { useNavigate } from 'react-router-dom'
 import Button from '~/components/Button'
 import Image from '~/components/Image'
 import classNames from 'classnames/bind'
+import { useTranslation } from 'react-i18next'
 import styles from './UserVideo.module.scss'
 import path from '~/constants/path'
 
 const cx = classNames.bind(styles)
 
 function UserVideo({ user }) {
+  const { t } = useTranslation(['following'])
   const navigate = useNavigate()
   const [video, setVideo] = useState()
   const { data } = useQuery({
@@ -74,7 +76,7 @@ function UserVideo({ user }) {
           {user.first_name} {user.last_name}
         </div>
         <div className={cx('nickname')}>{user.nickname}</div>
-        <Button className={cx('follow-btn')}>Following</Button>
+        <Button className={cx('follow-btn')}>{t('Following')}</Button>
       </div>
     </div>
   )

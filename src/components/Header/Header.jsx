@@ -15,6 +15,7 @@ import Search from './components/Search'
 import { Link } from 'react-router-dom'
 import path from '~/constants/path'
 import { menuItems, userMenu } from '~/constants/menu'
+import { useTranslation } from 'react-i18next'
 import classNames from 'classnames/bind'
 import styles from './Header.module.scss'
 
@@ -22,6 +23,7 @@ const cx = classNames.bind(styles)
 
 function Header() {
   const { toggleModal, isAuthenticated, setIsAuthenticated, profile } = useContext(AppContext)
+  const { t } = useTranslation(['header'])
 
   return (
     <header className={cx('wrapper')}>
@@ -34,7 +36,7 @@ function Header() {
           <>
             <div className={cx('actions')}>
               <Button to={path.upload} className={cx('btn-upload-hover')} icon={<FontAwesomeIcon icon={faPlus} />}>
-                Upload
+                {t('Upload')}
               </Button>
               <div>
                 <Tippy
@@ -45,9 +47,9 @@ function Header() {
                       <Wrapper>
                         <div className={cx('download-content')}>
                           <FontAwesomeIcon size='6x' icon={faLaptop} />
-                          <p>TikTok Desktop App</p>
+                          <p>{t('TikTok Desktop App')}</p>
                           <Button primary large>
-                            Download
+                            {t('Download')}
                           </Button>
                         </div>
                       </Wrapper>
@@ -79,10 +81,10 @@ function Header() {
           <>
             <div className={cx('actions')}>
               <Button className={cx('btn-upload-hover')} icon={<FontAwesomeIcon icon={faPlus} />}>
-                Upload
+                {t('Upload')}
               </Button>
               <Button primary onClick={toggleModal}>
-                Log in
+                {t('Log in')}
               </Button>
               <div>
                 <Tippy
@@ -93,9 +95,9 @@ function Header() {
                       <Wrapper>
                         <div className={cx('download-content')}>
                           <FontAwesomeIcon size='6x' icon={faLaptop} />
-                          <p>TikTok Desktop App</p>
+                          <p>{t('TikTok Desktop App')}</p>
                           <Button primary large>
-                            Download
+                            {t('Download')}
                           </Button>
                         </div>
                       </Wrapper>

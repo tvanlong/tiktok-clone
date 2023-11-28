@@ -20,12 +20,14 @@ import Tippy from '@tippyjs/react/headless'
 import Wrapper from '~/components/Wrapper'
 import formatDuration from 'format-duration'
 import formatTime from '~/utils/formatTime'
+import { useTranslation } from 'react-i18next'
 import classNames from 'classnames/bind'
 import styles from './Video.module.scss'
 
 const cx = classNames.bind(styles)
 
 function Video() {
+  const { t } = useTranslation(['video'])
   const { isAuthenticated } = useContext(AppContext)
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -255,7 +257,7 @@ function Video() {
                 </Link>
                 {!video.user.is_followed && (
                   <Button className={cx('btn-follow')} primary>
-                    Follow
+                    {t('Follow')}
                   </Button>
                 )}
               </div>
@@ -291,7 +293,7 @@ function Video() {
                     })
                   }}
                 >
-                  Copy Link
+                  {t('Copy Link')}
                 </button>
               </div>
             </div>
@@ -332,7 +334,7 @@ function Video() {
                                   }}
                                 >
                                   <FontAwesomeIcon icon={faTrash} />
-                                  Delete
+                                  {t('Delete')}
                                 </button>
                               </Wrapper>
                             </div>
@@ -357,10 +359,10 @@ function Video() {
           <div className={cx('add-comment')}>
             <form className={cx('comment-wrapper')} onSubmit={onSubmit}>
               <div className={cx('comment-input')}>
-                <input type='text' placeholder='Add a comment...' {...register('comment')} />
+                <input type='text' placeholder={t('Add a comment...')} {...register('comment')} />
               </div>
               <button type='submit' className={cx('btn-post')}>
-                Post
+                {t('Post')}
               </button>
             </form>
           </div>

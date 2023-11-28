@@ -12,12 +12,14 @@ import Button from '~/components/Button'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import path from '~/constants/path'
+import { useTranslation } from 'react-i18next'
 import classNames from 'classnames/bind'
 import styles from './Profile.module.scss'
 
 const cx = classNames.bind(styles)
 
 function Profile() {
+  const { t } = useTranslation(['profile'])
   const { isAuthenticated, setShowModal } = useContext(AppContext)
   const queryClient = useQueryClient()
   const [user, setUser] = useState()
@@ -163,15 +165,15 @@ function Profile() {
                   user &&
                   (user.nickname === getProfileFromLS().nickname ? (
                     <Button className={cx('btn-edit')} onClick={navigateToEditProfile}>
-                      Edit Profile
+                      {t('Edit Profile')}
                     </Button>
                   ) : user.is_followed ? (
                     <Button className={cx('btn-follow')} primary onClick={() => handleUnFollow(user.id)}>
-                      Unfollow
+                      {t('Unfollow')}
                     </Button>
                   ) : (
                     <Button className={cx('btn-follow')} primary onClick={() => handleFollow(user.id)}>
-                      Follow
+                      {t('Follow')}
                     </Button>
                   ))
                 ) : (
@@ -182,7 +184,7 @@ function Profile() {
                       setShowModal(true)
                     }}
                   >
-                    Follow
+                    {t('Follow')}
                   </Button>
                 )}
               </div>
@@ -190,15 +192,15 @@ function Profile() {
             <div className={cx('user-subinfo')}>
               <div className={cx('count-info')}>
                 <strong>{user.followings_count}</strong>
-                <span>Following</span>
+                <span>{t('Following')}</span>
               </div>
               <div className={cx('count-info')}>
                 <strong>{user.followers_count}</strong>
-                <span>Followers</span>
+                <span>{t('Followers')}</span>
               </div>
               <div className={cx('count-info')}>
                 <strong>{user.likes_count}</strong>
-                <span>Likes</span>
+                <span>{t('Likes')}</span>
               </div>
             </div>
             <div className={cx('desc')}>{user.bio}</div>

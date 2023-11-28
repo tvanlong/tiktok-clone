@@ -11,12 +11,14 @@ import { userSchema } from '~/utils/rules'
 import { getCurrentUser, updateProfile } from '~/apis/auth.api'
 import { getProfile as getProfileFromLS } from '~/utils/auth'
 import { toast } from 'react-toastify'
+import { useTranslation } from 'react-i18next'
 import classNames from 'classnames/bind'
 import styles from './EditProfile.module.scss'
 
 const cx = classNames.bind(styles)
 
 function EditProfile() {
+  const { t } = useTranslation(['editProfile'])
   const { setProfile } = useContext(AppContext)
   const [count, setCount] = useState(0)
   const [file, setFile] = useState()
@@ -142,11 +144,11 @@ function EditProfile() {
       <form className={cx('content')} onSubmit={onSubmit}>
         <div className={cx('edit-container')}>
           <div className={cx('header-container')}>
-            <h1 className={cx('header-title')}>Edit Profile</h1>
+            <h1 className={cx('header-title')}>{t('Edit profile')}</h1>
           </div>
           <div className={cx('content-container')}>
             <div className={cx('item-container')}>
-              <div className={cx('label')}>Profile photo</div>
+              <div className={cx('label')}>{t('Profile photo')}</div>
               <div className={cx('avatar-content')}>
                 <div className={cx('avatar')}>
                   <Image src={avatarUrl || user?.avatar} alt={user?.nickname} />
@@ -172,21 +174,21 @@ function EditProfile() {
                 <div className={cx('err')}>{errors.last_name?.message}</div>
                 <p>www.tiktok.com/@{user?.nickname}</p>
                 <p>
-                  Usernames can only contain letters, numbers, underscores, and periods. Changing your username will
-                  also change your profile link.
+                  {t(`Usernames can only contain letters, numbers, underscores, and periods. Changing your username will
+                  also change your profile link.`)}
                 </p>
               </div>
             </div>
             <div className={cx('item-container')}>
-              <div className={cx('label')}>Nick Name</div>
+              <div className={cx('label')}>{t('Nick Name')}</div>
               <div className={cx('edit-area')}>
-                <input disabled type='text' placeholder='Nickname' {...register('nickname')}></input>
+                <input disabled type='text' placeholder={t('Nick Name')} {...register('nickname')}></input>
                 <div className={cx('err')}>{errors.nickname?.message}</div>
-                <p>Your nickname can only be changed once every 7 days.</p>
+                <p>{t('Your nickname can only be changed once every 7 days.')}</p>
               </div>
             </div>
             <div className={cx('item-container')}>
-              <div className={cx('label')}>Bio</div>
+              <div className={cx('label')}>{t('Bio')}</div>
               <div className={cx('edit-area')}>
                 <textarea
                   defaultValue={user?.bio}
@@ -200,7 +202,7 @@ function EditProfile() {
             </div>
           </div>
           <div className={cx('footer-container')}>
-            <Button className={cx('btn-save')}>Save</Button>
+            <Button className={cx('btn-save')}>{t('Save')}</Button>
           </div>
         </div>
       </form>

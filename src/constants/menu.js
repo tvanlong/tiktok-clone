@@ -19,15 +19,17 @@ export const menuItems = [
   },
   {
     icon: <FontAwesomeIcon icon={faEarthAmericas} />,
-    title: 'English',
+    title: 'Language',
     children: {
       title: 'Language',
       data: [
         {
-          title: 'English'
+          title: 'English',
+          language: 'en'
         },
         {
-          title: 'Vietnamese'
+          title: 'Vietnamese',
+          language: 'vi'
         }
       ]
     }

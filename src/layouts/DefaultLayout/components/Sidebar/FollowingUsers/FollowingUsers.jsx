@@ -3,10 +3,12 @@ import { useQuery } from '@tanstack/react-query'
 import ListAccount from '~/components/ListAccount'
 import { getFollowingList } from '~/apis/followingList.api'
 import SidebarLoader from '~/contents/SidebarLoader'
+import { useTranslation } from 'react-i18next'
 
 const INIT_PAGE = 1
 
 function FollowingUsers() {
+  const { t } = useTranslation(['sidebar'])
   const [followingUsers, setFollowingUsers] = useState([])
   const [isSeeAllFollowing, setIsSeeAllFollowing] = useState(false)
   const { data: followingUsersData, isLoading } = useQuery({
@@ -28,7 +30,7 @@ function FollowingUsers() {
 
   return (
     <ListAccount
-      label='Recently following accounts'
+      label={t('Recently following accounts')}
       userData={followingUsers}
       onViewChange={handleFollowingViewChange}
       isSeeAll={isSeeAllFollowing}
