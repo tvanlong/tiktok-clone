@@ -173,10 +173,7 @@ function EditProfile() {
                 <input type='text' placeholder='Last Name' {...register('last_name')}></input>
                 <div className={cx('err')}>{errors.last_name?.message}</div>
                 <p>www.tiktok.com/@{user?.nickname}</p>
-                <p>
-                  {t(`Usernames can only contain letters, numbers, underscores, and periods. Changing your username will
-                  also change your profile link.`)}
-                </p>
+                <p>{t('username desc')}</p>
               </div>
             </div>
             <div className={cx('item-container')}>
@@ -184,7 +181,7 @@ function EditProfile() {
               <div className={cx('edit-area')}>
                 <input disabled type='text' placeholder={t('Nick Name')} {...register('nickname')}></input>
                 <div className={cx('err')}>{errors.nickname?.message}</div>
-                <p>{t('Your nickname can only be changed once every 7 days.')}</p>
+                <p>{t('nickname desc')}</p>
               </div>
             </div>
             <div className={cx('item-container')}>
