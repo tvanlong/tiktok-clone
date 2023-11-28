@@ -166,7 +166,7 @@ function EditProfile() {
               </div>
             </div>
             <div className={cx('item-container')}>
-              <div className={cx('label')}>User Name</div>
+              <div className={cx('label')}>{t('User Name')}</div>
               <div className={cx('edit-area')}>
                 <input type='text' placeholder='First Name' {...register('first_name')}></input>
                 <div className={cx('err')}>{errors.first_name?.message}</div>
