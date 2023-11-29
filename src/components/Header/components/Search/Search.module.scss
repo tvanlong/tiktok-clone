@@ -90,3 +90,55 @@
     transform: translateY(-50%) rotate(360deg);
   }
 }
+
+/* Mobile & Tablet */
+@media (max-width: 1024px) {
+  
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+ 
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .search {
+    width: 360px;
+  }
+
+  .search-result {
+    width: 360px;
+  }
+}
+
+@media (max-width: 600px) {
+  .search {
+    width: 300px;
+
+    input {
+      padding-right: 0;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: var(--search-top-spacer);
+      right: 40px;
+    }
+  }
+
+  .clear,
+  .loading {
+    right: 50px;
+  }
+
+  .search-result {
+    width: 300px;
+  }
+
+  .search-btn {
+    width: 40px;
+    margin-right: 4px;
+  }
+}

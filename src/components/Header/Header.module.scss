@@ -84,3 +84,39 @@
   color: var(--white);
   background-color: var(--primary);
 }
+
+/* Mobile & Tablet */
+@media (max-width: 1024px) {
+  .app-btn {
+    display: none;
+  }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .logo {
+    min-width: 200px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .logo {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 600px) {
+  .logo {
+    min-width: 80px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .messages-btn,
+  .inbox-btn {
+    display: none;
+  }
+}

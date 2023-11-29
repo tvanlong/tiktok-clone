@@ -16,3 +16,10 @@
   color: #fe2c55;
   cursor: pointer;
 }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .wrapper {
+    display: none;
+  }
+}

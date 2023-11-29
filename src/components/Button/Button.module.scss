@@ -116,3 +116,17 @@
   padding: 14px 16px;
   min-width: 140px;
 }
+
+/* Mobile & Tablet */
+@media (max-width: 1024px) {
+  .btn-upload-hover {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .primary {
+    min-width: 70px;
+    padding: 4px 8px;
+  }
+}

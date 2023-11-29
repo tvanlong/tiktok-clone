@@ -72,3 +72,31 @@
   gap: 12px;
   margin-left: 30px;
 }
+
+/* Mobile & Tablet */
+@media (max-width: 1024px) {
+  
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .wrapper {
+    width: 100%;
+    max-width: 630px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .wrapper {
+    width: 100%;
+    max-width: 500px;
+  }
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    width: 100%;
+    max-width: 400px;
+  }
+}

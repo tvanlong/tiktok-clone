@@ -20,3 +20,25 @@
   font-size: 1.6rem;
   line-height: 2.1rem;
 }
+
+/* Mobile & Tablet */
+@media (max-width: 1024px) {
+  
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .wrapper {
+    width: 65px;
+    border-right: 1px solid #efeff0;
+  }
+
+  .wrapper-login {
+    display: none;
+  }
+}
