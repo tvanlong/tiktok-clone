@@ -142,3 +142,9 @@
     margin-right: 4px;
   }
 }
+
+@media (max-width: 415px) {
+  .search {
+    display: none;
+  }
+}

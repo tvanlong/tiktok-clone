@@ -88,6 +88,7 @@ function Home() {
               <div key={video.id} className={cx('wrapper')}>
                 <div className={cx('list-item-container')}>
                   <Link
+                    className={cx('avatar-wrapper')}
                     to={`/@${video.user.nickname}`}
                     onMouseEnter={() => handlePrefetchingUser(`@${video.user.nickname}`)}
                   >

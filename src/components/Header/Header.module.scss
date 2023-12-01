@@ -23,6 +23,12 @@
   justify-content: space-between;
 }
 
+.navbar-menu,
+.navbar-menu-mobile,
+.check {
+  display: none;
+}
+
 .logo {
   min-width: 300px;
 }
@@ -118,5 +124,86 @@
   .messages-btn,
   .inbox-btn {
     display: none;
+  }
+}
+
+@media (max-width: 415px) {
+  .logo {
+    max-width: 100px;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .navbar-menu {
+    display: block;
+    background-color: transparent;
+    font-size: 1.8rem;
+    cursor: pointer;
+  }
+
+  .check {
+    &:checked ~ .navbar-menu-mobile {
+      transform: translateX(0);
+    }
+
+    &:checked ~ .nav-overlay {
+      display: block;
+    }
+  }
+
+  .nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9;
+    display: none;
+  }
+  
+  .navbar-menu-mobile {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    padding: 20px 0;
+    background-color: #fff;
+    border-right: 1px solid #e6e6e6;
+    z-index: 10;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+
+  .menu-item {
+    display: flex;
+    color: #000;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    border-bottom: 1px solid #e6e6e6;
+
+    &.active {
+      color: var(--primary);
+    }
+
+    &:hover {
+      color: var(--primary);
+    }
+  }
+
+  .icon {
+    margin-right: 10px;
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
   }
 }

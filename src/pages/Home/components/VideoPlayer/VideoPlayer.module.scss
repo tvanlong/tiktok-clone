@@ -1,5 +1,6 @@
 .video-wrapper {
   position: relative;
+  z-index: 1;
   height: 600px;
   border-radius: 10px;
   width: 350px;
@@ -81,7 +82,7 @@
   position: absolute;
   bottom: 35px;
   left: 20px;
-  z-index: 99;
+  z-index: 90;
 }
 
 .btn-sound {
@@ -90,7 +91,7 @@
   position: absolute;
   bottom: 35px;
   right: 20px;
-  z-index: 99;
+  z-index: 90;
 }
 
 /* Mobile & Tablet */
@@ -118,5 +119,19 @@
   .video-wrapper {
     height: 390px;
     width: 240px;
+  }
+}
+
+@media (max-width: 415px) {
+  .video-wrapper {
+    height: 450px;
+    width: 280px;
+  }
+}
+
+@media (max-width: 375px) {
+  .video-wrapper {
+    height: 350px;
+    width: 200px;
   }
 }

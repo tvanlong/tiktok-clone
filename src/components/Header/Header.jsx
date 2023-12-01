@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { AppContext } from '~/contexts/app.context'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faLaptop } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faLaptop, faBars } from '@fortawesome/free-solid-svg-icons'
 import Tippy from '@tippyjs/react/headless'
 import TippyDefault from '@tippyjs/react'
 import 'tippy.js/dist/tippy.css'
@@ -9,10 +9,19 @@ import images from '~/assets/images'
 import Wrapper from '~/components/Wrapper'
 import Button from '~/components/Button'
 import Menu from '~/components/Menu'
-import { DesktopApp, InboxIcon, MessageIcon, MoreIcon } from '~/constants/icons'
+import {
+  DesktopApp,
+  ExploreIcon,
+  HomeIcon,
+  InboxIcon,
+  LiveIcon,
+  MessageIcon,
+  MoreIcon,
+  UserGroupIcon
+} from '~/constants/icons'
 import Image from '~/components/Image'
 import Search from './components/Search'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import path from '~/constants/path'
 import { menuItems, userMenu } from '~/constants/menu'
 import { useTranslation } from 'react-i18next'
@@ -28,6 +37,39 @@ function Header() {
   return (
     <header className={cx('wrapper')}>
       <div className={cx('inner')}>
+        {/* Mobile Navbar */}
+        <label htmlFor='nav-mobile-input' className={cx('navbar-menu')}>
+          <FontAwesomeIcon icon={faBars} />
+        </label>
+        <input className={cx('check')} id='nav-mobile-input' type='checkbox' />
+        <label className={cx('nav-overlay')} htmlFor='nav-mobile-input'></label>
+        <div className={cx('navbar-menu-mobile')}>
+          <NavLink className={({ isActive }) => cx('menu-item', { active: isActive })} to={path.home}>
+            <span className={cx('icon')}>
+              <HomeIcon />
+            </span>
+            <span className={cx('title')}>For You</span>
+          </NavLink>
+          <NavLink className={({ isActive }) => cx('menu-item', { active: isActive })} to={path.following}>
+            <span className={cx('icon')}>
+              <UserGroupIcon />
+            </span>
+            <span className={cx('title')}>Following</span>
+          </NavLink>
+          <NavLink className={({ isActive }) => cx('menu-item', { active: isActive })} to={path.explore}>
+            <span className={cx('icon')}>
+              <ExploreIcon />
+            </span>
+            <span className={cx('title')}>Explore</span>
+          </NavLink>
+          <NavLink className={({ isActive }) => cx('menu-item', { active: isActive })} to={path.live}>
+            <span className={cx('icon')}>
+              <LiveIcon />
+            </span>
+            <span className={cx('title')}>Live</span>
+          </NavLink>
+        </div>
+        {/* End Mobile Navbar */}
         <Link className={cx('logo')} to={path.home}>
           <img src={images.logo} alt='Tiktok' />
         </Link>

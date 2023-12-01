@@ -130,3 +130,9 @@
     padding: 4px 8px;
   }
 }
+
+@media (max-width: 600px) {
+  .custom-follow {
+    display: none;
+  }
+}

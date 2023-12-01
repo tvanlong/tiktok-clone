@@ -43,3 +43,13 @@
     color: #fe2c55;
   }
 }
+@media (max-width: 415px) {
+  .custom-button {
+    padding: 10px 10px;
+  }
+
+  .custom-button .react-icon {
+    width: 15px;
+    height: 15px;
+  }
+}

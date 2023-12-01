@@ -163,3 +163,36 @@ body.active-modal {
     transform: translateX(-100%);
   }
 }
+
+/* Mobile & Tablet */
+@media (max-width: 1024px) {
+  .modal-content {
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 420px;
+  }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .modal-content {
+    top: 25%;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    top: 35%;
+  }
+}
+
+@media (max-width: 415px) {
+  .modal-content {
+    width: 340px;
+  }
+}
