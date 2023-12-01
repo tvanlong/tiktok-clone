@@ -29,7 +29,7 @@ function VideoPlayer({ video, navigateToVideo }) {
           }
         })
       },
-      { threshold: 0.7 }
+      { threshold: 0.9 }
     )
     const currentVideoRef = videoRef.current
 
