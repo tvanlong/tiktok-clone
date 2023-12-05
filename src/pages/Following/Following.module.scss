@@ -14,52 +14,20 @@
   gap: 18px;
 }
 
-.user-card {
-  position: relative;
-  height: 305px;
-  border-radius: 8px;
-  overflow: hidden;
+@media (max-width: 600px) {
+  .container {
+    max-width: 736px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 
-  video {
-    height: 100%;
+@media (max-width: 415px) {
+  .container {
     width: 100%;
-    object-fit: cover;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    // căn giữa
+    justify-items: center;
   }
 }
 
-.user-info {
-  position: absolute;
-  bottom: 15px;
-  left: 0;
-  right: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-}
-
-.user-avatar {
-  img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-  }
-}
-
-.user-name {
-  color: rgb(255, 255, 255);
-  font-weight: 700;
-  font-size: 1.8rem;
-  line-height: 24px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.nickname {
-  color: rgb(255, 255, 255);
-  font-weight: 600;
-  font-size: 1.4rem;
-  line-height: 18px;
-}
 

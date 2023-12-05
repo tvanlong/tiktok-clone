@@ -52,3 +52,16 @@
   font-size: 1.4rem;
   line-height: 18px;
 }
+
+@media (max-width: 600px) {
+  .user-card {
+    height: 340px;
+  }
+}
+
+@media (max-width: 415px) {
+  .user-card {
+    height: 520px;
+    width: 300px;
+  }
+}
