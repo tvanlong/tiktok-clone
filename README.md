@@ -52,4 +52,4 @@
 
 ### Preview
 
-![Alt text](image.png)
+![Alt text](src/assets/images/image.png)
