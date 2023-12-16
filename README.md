@@ -23,6 +23,7 @@
 
 - Sign in, sign up by account
 - Autoplay video on scroll
+- Infinite scroll video
 - Like, comment video
 - Customize video player interface
 - Upload video
