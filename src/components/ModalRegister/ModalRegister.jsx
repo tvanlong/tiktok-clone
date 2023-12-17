@@ -1,7 +1,5 @@
 import { useContext } from 'react'
 import { AppContext } from '~/contexts/app.context'
-import classNames from 'classnames/bind'
-import styles from './ModalRegister.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import Button from '~/components/Button'
@@ -9,14 +7,18 @@ import { useForm } from 'react-hook-form'
 import { schema } from '~/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
-import { registerAccount } from '~/apis/auth.api'
+import { loginAccount, registerAccount } from '~/apis/auth.api'
 import { omit } from 'lodash'
 import { toast } from 'react-toastify'
+import axios from 'axios'
+import { useGoogleLogin } from '@react-oauth/google'
+import classNames from 'classnames/bind'
+import styles from './ModalRegister.module.scss'
 
 const cx = classNames.bind(styles)
 
 function ModalRegister({ handleSwitchModal }) {
-  const { showModal, toggleModal } = useContext(AppContext)
+  const { showModal, setShowModal, toggleModal, setIsAuthenticated, setProfile } = useContext(AppContext)
   const {
     register,
     handleSubmit,
@@ -29,6 +31,10 @@ function ModalRegister({ handleSwitchModal }) {
 
   const registerAccountMutation = useMutation({
     mutationFn: (data) => registerAccount(data)
+  })
+
+  const loginAccountMutation = useMutation({
+    mutationFn: (data) => loginAccount(data)
   })
 
   const handleClearError = (e) => {
@@ -55,6 +61,42 @@ function ModalRegister({ handleSwitchModal }) {
         }
       }
     })
+  })
+
+  const signup = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      axios
+        .get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.access_token}`
+          }
+        })
+        .then((res) => {
+          // Đăng ký tài khoản thông qua google trước rồi mới đăng nhập
+          const { email, sub } = res.data
+          const registerData = {
+            type: 'email',
+            email,
+            password: sub
+          }
+          registerAccountMutation.mutate(registerData, {
+            onSuccess: () => {
+              const loginData = omit(registerData, ['type'])
+              loginAccountMutation.mutate(loginData, {
+                onSuccess: (data) => {
+                  setShowModal(false)
+                  toast.success('Login successfully', {
+                    autoClose: 1000
+                  })
+                  setIsAuthenticated(true)
+                  setProfile(data.data.data)
+                }
+              })
+            },
+            onError: (err) => {}
+          })
+        })
+    }
   })
 
   return (
@@ -94,6 +136,14 @@ function ModalRegister({ handleSwitchModal }) {
                   className={cx('btn-login-modal')}
                 >
                   Sign up
+                </Button>
+                <Button
+                  type='button'
+                  disabled={loginAccountMutation.isPending}
+                  className={cx('btn-login-google')}
+                  onClick={signup}
+                >
+                  Sign up with Google 🚀
                 </Button>
               </form>
               <div className={cx('text-signup')}>

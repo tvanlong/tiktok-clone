@@ -21,7 +21,7 @@
 
 ### Features
 
-- Sign in, sign up by account
+- Sign in, sign up by account, Google
 - Autoplay video on scroll
 - Infinite scroll video
 - Like, comment video
@@ -29,6 +29,7 @@
 - Upload video
 - Update personal profile
 - Search account by name
+- Paginate search result
 - Follow, unfollow any account
 - Following account
 - Suggested account

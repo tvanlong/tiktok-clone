@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from 'react-router-dom'
 import { faHeart, faCommentDots, faBookmark, faShare } from '@fortawesome/free-solid-svg-icons'
@@ -15,15 +15,17 @@ import { useQueryClient } from '@tanstack/react-query'
 import { getProfile } from '~/apis/auth.api'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import classNames from 'classnames/bind'
+import { AppContext } from '~/contexts/app.context'
 import { useTranslation } from 'react-i18next'
-import styles from './Home.module.scss'
 import path from '~/constants/path'
+import classNames from 'classnames/bind'
+import styles from './Home.module.scss'
 
 const cx = classNames.bind(styles)
 
 function Home() {
   const { t } = useTranslation(['home'])
+  const { isAuthenticated } = useContext(AppContext)
   const { ref, inView } = useInView()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
@@ -160,7 +162,7 @@ function Home() {
                 {video.user.first_name} {video.user.last_name}
               </span>
               <p className={cx('caption')}>{video.description}</p>
-              {!video.user.is_followed && (
+              {isAuthenticated && !video.user.is_followed && (
                 <Button primary className={cx('custom-follow')} onClick={() => handleFollow(video.user.id)}>
                   {t('Follow')}
                 </Button>
@@ -173,7 +175,7 @@ function Home() {
                   className={'custom-button'}
                   icon={faHeart}
                   count={video.likes_count}
-                  react={true}
+                  react={isAuthenticated ? true : false}
                   video={video}
                 />
                 <ReactButton className={'custom-button'} icon={faCommentDots} count={video.comments_count} />

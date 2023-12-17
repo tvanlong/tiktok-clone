@@ -7,13 +7,12 @@ import { useForm } from 'react-hook-form'
 import { schemaLogin } from '~/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
-import { loginAccount, registerAccount } from '~/apis/auth.api'
+import { loginAccount } from '~/apis/auth.api'
 import { toast } from 'react-toastify'
 import { useGoogleLogin } from '@react-oauth/google'
 import axios from 'axios'
 import classNames from 'classnames/bind'
 import styles from './ModalLogin.module.scss'
-import { omit } from 'lodash'
 
 const cx = classNames.bind(styles)
 
@@ -26,10 +25,6 @@ function ModalLogin({ handleSwitchModal }) {
     formState: { errors }
   } = useForm({
     resolver: yupResolver(schemaLogin)
-  })
-
-  const registerAccountMutation = useMutation({
-    mutationFn: (data) => registerAccount(data)
   })
 
   const loginAccountMutation = useMutation({
@@ -63,7 +58,7 @@ function ModalLogin({ handleSwitchModal }) {
     })
   })
 
-  const login = useGoogleLogin({
+  const signin = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       axios
         .get('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -72,41 +67,19 @@ function ModalLogin({ handleSwitchModal }) {
           }
         })
         .then((res) => {
-          // Đăng ký tài khoản thông qua google trước rồi mới đăng nhập
           const { email, sub } = res.data
-          const registerData = {
-            type: 'email',
+          const signinData = {
             email,
             password: sub
           }
-          registerAccountMutation.mutate(registerData, {
-            onSuccess: () => {
-              const loginData = omit(registerData, ['type'])
-              loginAccountMutation.mutate(loginData, {
-                onSuccess: (data) => {
-                  setShowModal(false)
-                  toast.success('Login successfully', {
-                    autoClose: 1000
-                  })
-                  setIsAuthenticated(true)
-                  setProfile(data.data.data)
-                }
+          loginAccountMutation.mutate(signinData, {
+            onSuccess: (data) => {
+              setShowModal(false)
+              toast.success('Login successfully', {
+                autoClose: 1000
               })
-            },
-            onError: (err) => {
-              if (err.response.status === 409) {
-                const loginData = omit(registerData, ['type'])
-                loginAccountMutation.mutate(loginData, {
-                  onSuccess: (data) => {
-                    setShowModal(false)
-                    toast.success('Login successfully', {
-                      autoClose: 1000
-                    })
-                    setIsAuthenticated(true)
-                    setProfile(data.data.data)
-                  }
-                })
-              }
+              setIsAuthenticated(true)
+              setProfile(data.data.data)
             }
           })
         })
@@ -151,9 +124,9 @@ function ModalLogin({ handleSwitchModal }) {
                   type='button'
                   disabled={loginAccountMutation.isPending}
                   className={cx('btn-login-google')}
-                  onClick={login}
+                  onClick={signin}
                 >
-                  Sign in with Google 🚀
+                  Sign in with previous Google account 🚀
                 </Button>
               </form>
               <div className={cx('text-signup')}>

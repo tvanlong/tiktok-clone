@@ -179,7 +179,7 @@ body.active-modal {
 /* Mobile & Tablet */
 @media (max-width: 1024px) {
   .modal-content {
-    top: 20%;
+    top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 420px;
@@ -193,18 +193,19 @@ body.active-modal {
 /* Mobile */
 @media (max-width: 768px) {
   .modal-content {
-    top: 25%;
+    top: 30%;
   }
 }
 
 @media (max-width: 600px) {
   .modal-content {
-    top: 35%;
+    top: 40%;
   }
 }
 
 @media (max-width: 415px) {
   .modal-content {
+    top: 50%;
     width: 340px;
   }
 }

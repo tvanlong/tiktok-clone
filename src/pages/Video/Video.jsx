@@ -56,7 +56,8 @@ function Video() {
 
   const { data: commentsData } = useQuery({
     queryKey: ['comments', video.id],
-    queryFn: () => getComments(video.id)
+    queryFn: () => getComments(video.id),
+    enabled: isAuthenticated
   })
 
   const comments = commentsData?.data?.data
