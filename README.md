@@ -17,7 +17,7 @@
 
 ### Live demo: 
 
-[tiktok-clone-ten-iota.vercel.app](tiktok-clone-ten-iota.vercel.app)
+🔗 [https://tiktok-clone-by-longzannn.vercel.app/](https://tiktok-clone-by-longzannn.vercel.app/)
 
 ### Features
 
