@@ -7,7 +7,7 @@ import { faHeart, faCommentDots, faBookmark, faShare } from '@fortawesome/free-s
 import { getVideoList } from '~/apis/video.api'
 import Image from '~/components/Image'
 import Button from '~/components/Button'
-import VideoPlayer from '~/pages/Home/components/VideoPlayer'
+import VideoPlayer from '~/pages/Home/VideoPlayer'
 import ReactButton from '~/components/ReactButton'
 import { followUser } from '~/apis/auth.api'
 import { toast } from 'react-toastify'

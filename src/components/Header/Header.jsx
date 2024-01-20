@@ -20,7 +20,7 @@ import {
   UserGroupIcon
 } from '~/constants/icons'
 import Image from '~/components/Image'
-import Search from './components/Search'
+import Search from './Search'
 import { Link, NavLink } from 'react-router-dom'
 import path from '~/constants/path'
 import { menuItems, userMenu } from '~/constants/menu'
@@ -115,7 +115,15 @@ function Header() {
                 </button>
               </TippyDefault>
               <Menu items={userMenu} setIsAuthenticated={setIsAuthenticated}>
-                <Image className={cx('avatar')} src={profile?.avatar || ''} alt={profile?.name || ''} />
+                <Image
+                  className={cx('avatar')}
+                  src={
+                    profile?.avatar !== 'https://files.fullstack.edu.vn/f8-tiktok/'
+                      ? profile?.avatar
+                      : 'https://i.pinimg.com/736x/9a/63/e1/9a63e148aaff53532b045f6d1f09d762.jpg'
+                  }
+                  alt={profile?.name || ''}
+                />
               </Menu>
             </div>
           </>

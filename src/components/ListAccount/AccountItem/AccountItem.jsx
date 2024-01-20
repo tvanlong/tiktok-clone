@@ -40,7 +40,15 @@ function AccountItem({ user }) {
         className={cx('account-item')}
         onMouseEnter={() => handlePrefetchingUser(`@${user.nickname}`)}
       >
-        <Image className={cx('avatar')} src={user.avatar} alt={user.nickname} />
+        <Image
+          className={cx('avatar')}
+          src={
+            user.avatar !== 'https://files.fullstack.edu.vn/f8-tiktok/'
+              ? user.avatar
+              : 'https://i.pinimg.com/736x/9a/63/e1/9a63e148aaff53532b045f6d1f09d762.jpg'
+          }
+          alt={user.nickname}
+        />
         <div className={cx('item-info')}>
           <p className={cx('nickname')}>
             <strong>{user.nickname}</strong>
@@ -61,7 +69,15 @@ function AccountItem({ user }) {
             className={cx('account-item')}
             onMouseEnter={() => handlePrefetchingUser(`@${user.nickname}`)}
           >
-            <Image className={cx('avatar')} src={user.avatar} alt={user.nickname} />
+            <Image
+              className={cx('avatar')}
+              src={
+                user.avatar !== 'https://files.fullstack.edu.vn/f8-tiktok/'
+                  ? user.avatar
+                  : 'https://i.pinimg.com/736x/9a/63/e1/9a63e148aaff53532b045f6d1f09d762.jpg'
+              }
+              alt={user.nickname}
+            />
             <div className={cx('item-info')}>
               <p className={cx('nickname')}>
                 <strong>{user.nickname}</strong>

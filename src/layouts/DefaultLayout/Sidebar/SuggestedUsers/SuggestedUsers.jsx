@@ -5,8 +5,8 @@ import { getSuggestedUsers } from '~/apis/suggestedUsers.api'
 import SidebarLoader from '~/contents/SidebarLoader'
 import { useTranslation } from 'react-i18next'
 
-const INIT_PAGE = 1
-const PER_PAGE = 20
+const INIT_PAGE = Math.floor(Math.random() * 10) + 1
+const PER_PAGE = 10
 
 function SuggestedUsers() {
   const { t } = useTranslation(['sidebar'])
