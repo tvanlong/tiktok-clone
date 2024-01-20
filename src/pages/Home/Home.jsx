@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, useNavigate } from 'react-router-dom'
 import { faHeart, faCommentDots, faBookmark, faShare } from '@fortawesome/free-solid-svg-icons'
@@ -38,7 +38,7 @@ function Home() {
       return nextPage
     }
   })
-  const videoList = data?.pages.flatMap((page) => page.data.data)
+  const videoList = useMemo(() => data?.pages.flatMap((page) => page.data.data), [data])
 
   useEffect(() => {
     if (inView && hasNextPage) {
